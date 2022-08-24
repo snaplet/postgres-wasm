@@ -1,0 +1,40 @@
+<!doctype html>
+<title>Postgres in browser</title>
+
+<script src="./build/libv86.js"></script>
+<script>
+    "use strict";
+
+    window.onload = function () {
+
+
+        var emulator = new V86Starter({
+            wasm_path: "./build/v86.wasm",
+            memory_size: 512 * 1024 * 1024,
+            vga_memory_size: 8 * 1024 * 1024,
+            screen_container: document.getElementById("screen_container"),
+            initial_state: { url: "../images/debian-state-base.bin" },
+            filesystem: { baseurl: "../images/debian-9p-rootfs-flat/" },
+            autostart: true,
+        });
+
+
+        setTimeout(function () {
+            console.log("Send command to terminal")
+            // This isnt working. serial0 is probably tty0. And not sure what is displayed in screen_container
+            // I probably have to set an option or build image with this functionality
+            emulator.serial0_send("ls")
+
+            //emulator.serial0_send("cp /etc/hosts.extra /etc/hosts")
+
+        }, 2 * 1000);
+    };
+
+
+</script>
+
+<!-- A minimal structure for the ScreenAdapter defined in browser/screen.js -->
+<div id="screen_container">
+    <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
+    <canvas style="display: none"></canvas>
+</div>
