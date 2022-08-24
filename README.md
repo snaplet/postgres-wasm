@@ -16,11 +16,13 @@ Folder structure:
     │   ├── build         
     │   └── ...           # Other files
     └── v86
+2. Install docker
 
-2. In debian run `./build-container.sh` to build the Docker container and v86 images (requires docker)
+## Build linux image
+1. In debian folder run `./build-container.sh` to build the Docker container and v86 images (requires docker)
 3. Run `./build-state.js` to build a state image in order to skip the boot process
 4. You should see a debian-state-base.bin file in images folder
-## To run you have to just serve the static files in this folder:
+## Run - Serve the static files in this folder
 
 1. Install http-server:
 ```bash
