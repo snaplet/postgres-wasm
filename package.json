@@ -1,0 +1,19 @@
+{
+  "name": "@snaplet/pg-wasm",
+  "version": "0.0.1",
+  "description": "PostgresQL running in the browser via WebAssembly",
+  "main": "src/index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snaplet/pg-wasm.git"
+  },
+  "keywords": [
+    "postgresql",
+    "wasm"
+  ],
+  "homepage": "https://github.com/snaplet/pg-wasm#readme"
+}
