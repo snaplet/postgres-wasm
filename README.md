@@ -13,7 +13,7 @@ Folder structure:
     ├── pg-browser        # This repo
     │   ├── images        # Linux images
     │   ├── build         
-    │   └── ...           # Otjer files
+    │   └── ...           # Other files
     └── v86
 
 2. In debian run `./build-container.sh` to build the Docker container and v86 images (requires docker)
