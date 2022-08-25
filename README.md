@@ -27,6 +27,24 @@ Folder structure:
 1. In debian folder run `./build-container.sh` to build the Docker container and v86 images (requires docker)
 3. Run `./build-state.js` to build a state image in order to skip the boot process
 4. You should see a debian-state-base.bin file in images folder
+
+5. (Optional) Compress the state image to roughly one third, use (zstd)[https://github.com/facebook/zstd].
+* Install:
+    ```bash
+    brew install zstd (mac)
+    apt install zstd (linux)
+    ```
+* Compress `/images/debian-state-base.bin`:
+    ```bash
+    zstd images/debian-state-base.bin 
+    ```
+* This will produce a `debian-state-base.bin.zst` file. Now update `index.html` accordingly:
+    ```js
+    ...
+    initial_state: { url: "../images/debian-state-base.bin.zst" }
+    ...
+    ```
+
 ## Run - Serve the static files in this folder
 
 1. Install http-server:
