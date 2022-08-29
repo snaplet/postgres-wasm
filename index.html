@@ -1,39 +1,50 @@
 <!doctype html>
-<title>Postgres in browser</title>
 
-<script src="./build/libv86.js"></script>
-<script>
-    "use strict";
+<head>
+    <title>Postgres in browser</title>
+    <link rel="stylesheet" href="https://unpkg.com/xterm@4.19.0/css/xterm.css" />
+    <script src="https://unpkg.com/xterm@4.19.0/lib/xterm.js"></script>
+    <script src="./build/libv86.js"></script>
+    <script>
+        window.onload = () => {
+            var emulator = new V86Starter({
+                wasm_path: "./build/v86.wasm",
+                memory_size: 512 * 1024 * 1024,
+                vga_memory_size: 8 * 1024 * 1024,
+                screen_container: document.getElementById("screen_container"),
+                serial_container_xtermjs: document.getElementById("terminal"),
+                bios: {
+                    url: "./system/seabios.bin",
+                },
+                vga_bios: {
+                    url: "./system/vgabios.bin",
+                },
+                cdrom: {
+                    url: "./images/linux.iso",
+                },
+                disable_speaker: true,
+                initial_state: { url: "./state/state.bin.zst" },
+                network_relay_url: "ws://localhost:8080/", // For non localhost: wss://relay.widgetry.org/
+                autostart: true,
+            });
 
-    window.onload = function () {
-        var emulator = new V86Starter({
-            wasm_path: "./build/v86.wasm",
-            memory_size: 512 * 1024 * 1024,
-            vga_memory_size: 8 * 1024 * 1024,
-            screen_container: document.getElementById("screen_container"),
-            bios: {
-                url: "./system/seabios.bin",
-            },
-            vga_bios: {
-                url: "./system/vgabios.bin",
-            },
-            cdrom: {
-                url: "./images/linux.iso",
-            },
-            initial_state: { url: "./state/state.bin.zst" },
-            network_relay_url: "ws://localhost:8080/", // For non localhost: wss://relay.widgetry.org/
-            autostart: true,
-        });
+            emulator.add_listener("emulator-ready", function () {
+                setTimeout(() => {
+                    emulator.serial0_send('clear\n');
+                    emulator.serial0_send('psql -U postgres\n');
+                    emulator.serial_adapter.term.focus();
+                }, 0);
+            });
+        };
 
-        emulator.add_listener("emulator-ready", function () {
-            setTimeout(() =>
-                emulator.keyboard_send_text('psql -U postgres \n'), 100)
-        });
-    };
+    </script>
+</head>
 
-</script>
+<body>
+    <div id="screen_container" style="display:none;">
+        <div></div>
+        <canvas></canvas>
+    </div>
 
-<div id="screen_container">
-    <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
-    <canvas style="display: none"></canvas>
-</div>
+    <div id="terminal"></div>
+</body>
