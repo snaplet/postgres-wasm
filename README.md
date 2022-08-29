@@ -1,8 +1,10 @@
 
-# pg-browser
+# pg-wasm
 
 Run [PostgreSQL](https://www.postgresql.org/) in the browser:
-![Screenshot 2022-08-24 at 10 01 15](https://user-images.githubusercontent.com/20510494/186364240-47d25099-c4d2-473b-9f92-7a211a878fc6.png)
+
+![Screenshot 2022-08-29 at 14 58 13](https://user-images.githubusercontent.com/20510494/187206593-81811973-f2b2-45be-a5a2-d6c9cc57d973.png)
+
 
 ## Run - Serve the static files in this folder
 
