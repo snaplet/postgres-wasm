@@ -7,6 +7,8 @@ const server = httpServer.createServer();
 const port = argv.p || 8081;
 const host = argv.h || "0.0.0.0";
 
-server.listen(port, host, () => {
-  console.log(`Listening on port ${port}`);
-});
+if (argv._.includes("start")) {
+  server.listen(port, host, () => {
+    console.log(`Listening on port ${port}`);
+  });
+}

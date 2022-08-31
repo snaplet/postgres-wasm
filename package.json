@@ -21,6 +21,6 @@
   ],
   "homepage": "https://github.com/snaplet/pg-wasm#readme",
   "bin": {
-    "pg-wasm": "./bin/pg-wasm.js"
+    "@snaplet/pg-wasm": "./bin/pg-wasm.js"
   }
 }
