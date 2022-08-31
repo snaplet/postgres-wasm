@@ -4,6 +4,10 @@
   "description": "PostgresQL running in the browser via WebAssembly",
   "main": "src/index.js",
   "license": "MIT",
+  "dependencies": {
+    "http-server": "14.1.1",
+    "minimist": "1.2.6"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +19,8 @@
     "postgresql",
     "wasm"
   ],
-  "homepage": "https://github.com/snaplet/pg-wasm#readme"
+  "homepage": "https://github.com/snaplet/pg-wasm#readme",
+  "bin": {
+    "@snaplet/pg-wasm": "./bin/pg-wasm.js"
+  }
 }
