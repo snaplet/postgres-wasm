@@ -21,8 +21,11 @@
 
             emulator.add_listener("emulator-ready", function () {
                 setTimeout(() => {
-                    emulator.serial0_send('select version();\n');
-                    emulator.serial_adapter.term.focus();
+                    emulator.serial0_send('\\! clear\n');
+                    setTimeout(() => {
+                        document.getElementById("terminal").style = 'display:block';
+                        emulator.serial_adapter.term.focus();
+                    }, 300);
                 }, 0);
             });
 
@@ -90,5 +93,5 @@
         Restore from file: <input id="restore_file" type="file">
     </div>
     <hr />
-    <div id="terminal"></div>
+    <div id="terminal" style="display:none"></div>
 </body>
