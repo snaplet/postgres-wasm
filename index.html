@@ -4,11 +4,11 @@
     <title>Postgres in browser</title>
     <link rel="stylesheet" href="https://unpkg.com/xterm@4.19.0/css/xterm.css" />
     <script src="https://unpkg.com/xterm@4.19.0/lib/xterm.js"></script>
-    <script src="./build/libv86.js"></script>
+    <script src="./build/no-jit/libv86.js"></script>
     <script>
         window.onload = () => {
             var emulator = new V86Starter({
-                wasm_path: "./build/v86.wasm",
+                wasm_path: "./build/no-jit/v86.wasm",
                 memory_size: 512 * 1024 * 1024,
                 screen_container: document.getElementById("screen_container"),
                 serial_container_xtermjs: document.getElementById("terminal"),
@@ -22,7 +22,7 @@
 
             emulator.add_listener("emulator-ready", function () {
                 setTimeout(() => {
-                    emulator.serial0_send('\\! clear\n');
+                    emulator.serial0_send('\\! reset\n');
                     setTimeout(() => {
                         document.getElementById("terminal").style = 'display:block';
                         emulator.serial_adapter.term.focus();
