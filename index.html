@@ -4,47 +4,95 @@
     <title>Postgres in browser</title>
     <link rel="stylesheet" href="https://unpkg.com/xterm@4.19.0/css/xterm.css" />
     <script src="https://unpkg.com/xterm@4.19.0/lib/xterm.js"></script>
-    <script src="./build/libv86.js"></script>
+    <script src="./build/no-jit/libv86.js"></script>
     <script>
         window.onload = () => {
             var emulator = new V86Starter({
-                wasm_path: "./build/v86.wasm",
+                wasm_path: "./build/no-jit/v86.wasm",
                 memory_size: 512 * 1024 * 1024,
-                vga_memory_size: 8 * 1024 * 1024,
                 screen_container: document.getElementById("screen_container"),
                 serial_container_xtermjs: document.getElementById("terminal"),
-                bios: {
-                    url: "./system/seabios.bin",
-                },
-                vga_bios: {
-                    url: "./system/vgabios.bin",
-                },
-                cdrom: {
-                    url: "./images/linux.iso",
-                },
-                disable_speaker: true,
                 initial_state: { url: "./state/state.bin.zst" },
-                network_relay_url: "ws://localhost:8080/", // For non localhost: wss://relay.widgetry.org/
+                network_relay_url: "wss://relay.widgetry.org/", // For non localhost: wss://relay.widgetry.org/
                 autostart: true,
+                disable_keyboard: true,
+                disable_mouse: true,
+                disable_speaker: true,
             });
 
             emulator.add_listener("emulator-ready", function () {
                 setTimeout(() => {
-                    emulator.serial0_send('clear\n');
-                    emulator.serial0_send('psql -U postgres\n');
-                    emulator.serial_adapter.term.focus();
+                    emulator.serial0_send('\\! reset\n');
+                    setTimeout(() => {
+                        document.getElementById("terminal").style = 'display:block';
+                        emulator.serial_adapter.term.focus();
+                    }, 300);
                 }, 0);
             });
+
+            var state;
+
+            document.getElementById("save_restore").onclick = async function () {
+                var button = this;
+
+                if (state) {
+                    button.value = "Save state";
+                    await emulator.restore_state(state);
+                    state = undefined;
+                }
+                else {
+                    const new_state = await emulator.save_state();
+                    console.log("Saved state of " + new_state.byteLength + " bytes");
+                    button.value = "Restore state";
+                    state = new_state;
+                }
+
+                button.blur();
+            };
+
+            document.getElementById("save_file").onclick = async function () {
+                const new_state = await emulator.save_state();
+                var a = document.createElement("a");
+                a.download = "v86state.bin";
+                a.href = window.URL.createObjectURL(new Blob([new_state]));
+                a.dataset.downloadurl = "application/octet-stream:" + a.download + ":" + a.href;
+                a.click();
+
+                this.blur();
+            };
+
+            document.getElementById("restore_file").onchange = function () {
+                if (this.files.length) {
+                    var filereader = new FileReader();
+                    emulator.stop();
+
+                    filereader.onload = async function (e) {
+                        await emulator.restore_state(e.target.result);
+                        emulator.run();
+                    };
+
+                    filereader.readAsArrayBuffer(this.files[0]);
+
+                    this.value = "";
+                }
+
+                this.blur();
+            };
         };
 
     </script>
 </head>
 
 <body>
-    <div id="screen_container" style="display:none;">
+    <div id="screen_container" style="display:none">
         <div></div>
         <canvas></canvas>
     </div>
-
-    <div id="terminal"></div>
+    <div>
+        <input id="save_restore" type="button" value="Save state">
+        <input id="save_file" type="button" value="Save state to file">
+        Restore from file: <input id="restore_file" type="file">
+    </div>
+    <hr />
+    <div id="terminal" style="display:none"></div>
 </body>
