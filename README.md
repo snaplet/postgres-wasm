@@ -22,3 +22,28 @@ npx serve
 ```
 
 Tada! You should see a working psql terminal
+
+# Boot a new image and save a new snapshot
+
+0. Place the new `linux.iso` image in the `images/` folder
+
+1. Go the `http://localhost:3000?boot=true`
+
+2. Once the boot is completed, run:
+
+```bash
+udhcpc
+psql -U postgres
+# Type this command in the psql session
+\! reset
+```
+
+3. Click the "Save state to file" button
+
+4. Put the state file into the `state/` folder and compress it:
+
+```bash
+zstd --ultra -22 state/state.bin && rm state/state.bin
+```
+
+5. Go to `http://localhost:3000`, the boot should be instant :rocket:

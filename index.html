@@ -7,18 +7,41 @@
     <script src="./build/no-jit/libv86.js"></script>
     <script>
         window.onload = () => {
-            var emulator = new V86Starter({
+            const baseOptions = {
                 wasm_path: "./build/no-jit/v86.wasm",
                 memory_size: 512 * 1024 * 1024,
                 screen_container: document.getElementById("screen_container"),
                 serial_container_xtermjs: document.getElementById("terminal"),
-                initial_state: { url: "./state/state.bin.zst" },
                 network_relay_url: "wss://relay.widgetry.org/", // For non localhost: wss://relay.widgetry.org/
                 autostart: true,
                 disable_keyboard: true,
                 disable_mouse: true,
                 disable_speaker: true,
-            });
+            };
+
+            const params = (new URL(document.location)).searchParams;
+            const boot = params.get("boot") === "true";
+
+            if (boot) {
+                document.getElementById("screen_container").style = 'display:block';
+            }
+
+            const options = {
+                ...baseOptions,
+                ...(boot ? {
+                    bios: {
+                        url: "./system/seabios.bin",
+                    },
+                    vga_bios: {
+                        url: "./system/vgabios.bin",
+                    },
+                    cdrom: {
+                        url: "./images/linux.iso",
+                    }
+                } : { initial_state: { url: "./state/state.bin.zst" } })
+            };
+
+            var emulator = new V86Starter(options);
 
             emulator.add_listener("emulator-ready", function () {
                 setTimeout(() => {
