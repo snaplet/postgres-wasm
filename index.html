@@ -44,15 +44,17 @@
 
             var emulator = new V86Starter(options);
 
-            emulator.add_listener("serial0-output-line", (line) => {
+            function handleBoot(line) {
                 if (line === "postgres=# boot_completed\r\n") {
+                    console.log({ emulator })
+                    emulator.remove_listener(handleBoot);
                     setTimeout(() => {
                         document.getElementById("terminal").style = 'filter: none;';
                         emulator.serial_adapter.term.focus();
                     }, 300);
-
                 }
-            });
+            }
+            emulator.add_listener("serial0-output-line", handleBoot);
 
             emulator.add_listener("emulator-ready", function () {
                 setTimeout(() => {
