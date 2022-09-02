@@ -10,6 +10,7 @@
             const baseOptions = {
                 wasm_path: "./build/no-jit/v86.wasm",
                 memory_size: 512 * 1024 * 1024,
+                filesystem: {},
                 screen_container: document.getElementById("screen_container"),
                 serial_container_xtermjs: document.getElementById("terminal"),
                 network_relay_url: "wss://relay.widgetry.org/", // For non localhost: wss://relay.widgetry.org/
@@ -43,13 +44,24 @@
 
             var emulator = new V86Starter(options);
 
-            emulator.add_listener("emulator-ready", function () {
-                setTimeout(() => {
-                    emulator.serial0_send('\\! reset\n');
+            function handleBoot(line) {
+                if (line === "postgres=# boot_completed\r\n") {
+                    emulator.remove_listener(handleBoot);
                     setTimeout(() => {
-                        document.getElementById("terminal").style = 'display:block';
+                        document.getElementById("terminal").style = 'filter: none;';
                         emulator.serial_adapter.term.focus();
                     }, 300);
+                }
+            }
+            emulator.add_listener("serial0-output-line", handleBoot);
+
+            emulator.add_listener("emulator-ready", function () {
+                setTimeout(() => {
+                    if (!boot) {
+                        emulator.serial0_send('/etc/init.d/S40network restart\n');
+                        emulator.serial0_send('psql -U postgres\n');
+                        emulator.serial0_send('\\! echo "boot_completed"; reset\n');
+                    }
                 }, 0);
             });
 
@@ -117,5 +129,5 @@
         Restore from file: <input id="restore_file" type="file">
     </div>
     <hr />
-    <div id="terminal" style="display:none"></div>
+    <div id="terminal" style="filter: blur(3px);"></div>
 </body>

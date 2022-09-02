@@ -25,20 +25,11 @@ Tada! You should see a working psql terminal
 
 # Boot a new image and save a new snapshot
 
-0. Place the new `linux.iso` image in the `images/` folder
+1. Place the new `linux.iso` image in the `images/` folder
 
-1. Go the `http://localhost:3000?boot=true`
+2. Go the `http://localhost:3000?boot=true`
 
-2. Once the boot is completed, run:
-
-```bash
-udhcpc
-psql -U postgres
-# Type this command in the psql session
-\! reset
-```
-
-3. Click the "Save state to file" button
+3. Once the boot is completed, click the "Save state to file" button
 
 4. Put the state file into the `state/` folder and compress it:
 
