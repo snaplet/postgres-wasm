@@ -113,6 +113,21 @@
 
                 this.blur();
             };
+
+            document.getElementById("upload_files").onchange = function (e) {
+                var files = e.target.files;
+                for (var i = 0; i < files.length; i++) {
+                    var reader = new FileReader();
+                    reader.onload = function (file) {
+                        return function (e) {
+                            var data = (new TextEncoder('UTF-8')).encode(e.target.result);
+                            emulator.create_file("/" + file.name, data);
+                            console.log("uploaded " + file.name);
+                        }
+                    }(files[i]);
+                    reader.readAsText(files[i]);
+                }
+            }
         };
 
     </script>
@@ -127,6 +142,7 @@
         <input id="save_restore" type="button" value="Save state">
         <input id="save_file" type="button" value="Save state to file">
         Restore from file: <input id="restore_file" type="file">
+        Upload files to the emulator: <input id="upload_files" type="file" multiple>
     </div>
     <hr />
     <div id="terminal" style="filter: blur(3px);"></div>
