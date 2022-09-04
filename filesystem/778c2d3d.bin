@@ -1,0 +1,2 @@
+# Soft dependencies extracted from modules themselves.
+softdep xt_LOG pre: nf_log_syslog

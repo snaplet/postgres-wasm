@@ -1,0 +1,9 @@
+kernel/fs/efivarfs/efivarfs.ko
+kernel/drivers/thermal/intel/x86_pkg_temp_thermal.ko
+kernel/net/netfilter/nf_log_syslog.ko
+kernel/net/netfilter/xt_mark.ko
+kernel/net/netfilter/xt_nat.ko
+kernel/net/netfilter/xt_LOG.ko
+kernel/net/netfilter/xt_MASQUERADE.ko
+kernel/net/netfilter/xt_addrtype.ko
+kernel/net/ipv4/netfilter/iptable_nat.ko
