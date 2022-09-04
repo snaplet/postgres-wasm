@@ -23,13 +23,15 @@ npx serve
 
 Tada! You should see a working psql terminal
 
-# Boot a new image and save a new snapshot
+# Boot and save a new snapshot
 
-1. Place the new `linux.iso` image in the `images/` folder
+1. Place the `filesystem` folder produced by https://github.com/jgoux/pg-browser in the root of the repository
+
+2. Search in the `filesystem/filesystem.json` file for the `bzImage` corresponding `.bin` filename and replace its value in [index.html](index.html#L39)
 
 2. Go the `http://localhost:3000?boot=true`
 
-3. Once the boot is completed, click the "Save state to file" button
+3. Once the boot is completed, clear the cache running `echo 3 > /proc/sys/vm/drop_caches && reset` and click the "Save state to file" button
 
 4. Put the state file into the `state/` folder and compress it:
 
