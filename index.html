@@ -4,12 +4,12 @@
     <title>Postgres in browser</title>
     <link rel="stylesheet" href="https://unpkg.com/xterm@4.19.0/css/xterm.css" />
     <script src="https://unpkg.com/xterm@4.19.0/lib/xterm.js"></script>
-    <script src="./build/no-jit/libv86.js"></script>
+    <script src="./build/libv86.js"></script>
     <script>
         window.onload = () => {
             const baseOptions = {
-                wasm_path: "./build/no-jit/v86.wasm",
-                memory_size: 512 * 1024 * 1024,
+                wasm_path: "./build/v86.wasm",
+                memory_size: 128 * 1024 * 1024,
                 filesystem: {
                     basefs: "filesystem/filesystem.json",
                     baseurl: "filesystem/",
@@ -57,6 +57,7 @@
                 emulator.add_listener("emulator-ready", function () {
                     setTimeout(() => {
                         emulator.serial0_send('/etc/init.d/S40network restart\n');
+                        emulator.serial0_send("su - postgres -c '/usr/bin/pg_ctl start -w -D /var/lib/pgsql -l logfile'\n");
                         emulator.serial0_send('psql -U postgres\n');
                         emulator.serial0_send('\\! echo "boot_completed"; reset\n');
                     }, 0);
