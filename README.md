@@ -14,8 +14,8 @@ Go to http://localhost:3000 and have fun!
 
 ## :eyes: Going further
 
-- [pg-wasm](/packages/pg-wasm/README.md)
-- [Buildroot](/packages/buildroot/README.md)
+- [pg-wasm](/packages/pg-wasm)
+- [Buildroot](/packages/buildroot)
 
 ## :clap: Aknowledgements
 
