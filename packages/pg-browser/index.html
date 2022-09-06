@@ -3,6 +3,8 @@
 <head>
     <title>Postgres in browser</title>
     <link rel="stylesheet" href="https://unpkg.com/xterm@4.19.0/css/xterm.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://unpkg.com/xterm-addon-fit@0.5.0/lib/xterm-addon-fit.js"></script>
     <script src="https://unpkg.com/xterm@4.19.0/lib/xterm.js"></script>
     <script src="./lib/libv86.js"></script>
     <script>
@@ -56,6 +58,12 @@
 
             if (!boot) {
                 emulator.add_listener("emulator-ready", function () {
+                    console.log(window)
+                    const fitAddon = new FitAddon.FitAddon();
+                    emulator.serial_adapter.term.loadAddon(fitAddon);
+                    fitAddon.fit();
+                    // emulator.serial_adapter.term.setOption("allowTransparency", true);
+                    // emulator.serial_adapter.term.setOption("theme", { background: "transparent" });
                     setTimeout(() => {
                         emulator.serial0_send('/etc/init.d/S40network restart\n');
                         emulator.serial0_send('psql -U postgres\n');
@@ -155,5 +163,9 @@
         Upload files to the emulator: <input id="upload_files" type="file" multiple>
     </div>
     <hr />
-    <div id="terminal" style="filter: blur(3px);"></div>
+    <div class="container">
+        <div class="xterminal">
+            <div id="terminal" style="filter: blur(3px);"></div>
+        </div>
+    </div>
 </body>

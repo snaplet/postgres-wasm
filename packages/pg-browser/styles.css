@@ -1,0 +1,76 @@
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #000;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+#terminal {
+  width: 100%;
+  flex: 1 0;
+}
+
+.xterminal {
+	position: relative;
+  padding: 16px;
+	width: 120ch;
+	height: 60%;
+	background: black; /* linear-gradient(0deg, #000, #272727); */
+  border-radius: 7px;
+  display: flex;
+}
+
+.xterminal:before, .xterminal:after {
+	content: '';
+	position: absolute;
+	left: -1px;
+	top: -1px;
+  border-radius: 7px;
+	background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00,#ffff00, #ff0000, #fb0094,
+		#0000ff, #00ff00,#ffff00, #ff0000);
+	background-size: 400%;
+	width: calc(100% + 2px);
+	height: calc(100% + 2px);
+	z-index: -1;
+	animation: steam 120s linear infinite;
+}
+
+.xterm .xterm-viewport {
+  overflow-y: auto;
+  scrollbar-color: var(--highlight) var(--dark);
+  scrollbar-width: thin;
+}
+
+.xterm-viewport::-webkit-scrollbar {
+  background-color: var(--dark);
+  width: 5px;
+}
+
+.xterm-viewport::-webkit-scrollbar-thumb {
+  background: var(--highlight);
+}
+
+@keyframes steam {
+	0% {
+		background-position: 0 0;
+	}
+	50% {
+		background-position: 400% 0;
+	}
+	100% {
+		background-position: 0 0;
+	}
+}
+
+.xterminal:after {
+	filter: blur(50px);
+  opacity: calc(1 / 3);
+}
