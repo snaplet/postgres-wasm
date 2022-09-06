@@ -9,13 +9,13 @@ The goal of this build process is to produce a `filesystem` folder containing a 
 1. Build and run the container to execute Buildroot
 
 ```bash
-build.sh
+./build.sh
 ```
 
   1.1. If you need to refresh the Buildroot configuration files from the host, execute this command [OPTIONAL]:
 
   ```bash
-  cp -r /pg-wasm/* /pg-wasm/.config .
+  cp -r /config/* /config/.config .
   ```
 
   1.2. Tweak the configuration and save it back to the host [OPTIONAL]:
@@ -38,8 +38,10 @@ build.sh
   cp output/build/linux-5.17.15/.config /pg-wasm/board/pg-wasm/linux.conf
   ```
 
-2. Build the `filesystem` folder (available in the `build` folder at the end of process):
+2. Build the `filesystem` folder:
 
 ```bash
 make
 ```
+
+The `filesystem` folder should be available on the host at `build/filesystem`
