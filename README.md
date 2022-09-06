@@ -1,4 +1,4 @@
-# :elephant: PostgreSQL, in your browser
+# :elephant: PostgreSQL, in your browser :globe_with_meridians:
 
 ## :zap: Getting started
 

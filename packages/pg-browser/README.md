@@ -1,5 +1,5 @@
 
-# pg-browser
+# :elephant: pg-browser :globe_with_meridians:
 
 > Web shell to interact with [PostgreSQL](https://www.postgresql.org/) in the browser
 
