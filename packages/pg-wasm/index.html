@@ -32,11 +32,12 @@
                 document.getElementById("terminal").style = '';
             }
 
+            const bzimageUrl = "./filesystem/919db13e.bin";
             const options = {
                 ...baseOptions,
                 ...(boot ? {
                     bzimage: {
-                        url: "./filesystem/919db13e.bin"
+                        url: bzimageUrl,
                     },
                     cmdline: [
                         "rw",
