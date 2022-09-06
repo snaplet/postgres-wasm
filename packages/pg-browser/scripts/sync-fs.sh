@@ -3,7 +3,7 @@
 # Get the current script directory
 script_dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 
-# Root of pg-wasm package
+# Root of pg-browser package
 root="$script_dir/.."
 
 # Clean up

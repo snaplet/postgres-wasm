@@ -3,7 +3,7 @@
 ## :zap: Getting started
 
 ```bash
-cd pg-wasm && npx serve
+cd pg-browser && npx serve
 ```
 
 Go to http://localhost:3000 and have fun!
@@ -14,7 +14,7 @@ Go to http://localhost:3000 and have fun!
 
 ## :eyes: Going further
 
-- [pg-wasm](/packages/pg-wasm)
+- [pg-browser](/packages/pg-browser)
 - [Buildroot](/packages/buildroot)
 
 ## :clap: Aknowledgements

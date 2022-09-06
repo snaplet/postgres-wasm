@@ -1,8 +1,8 @@
-# Buildroot
+# :construction_worker: Buildroot
 
 > Buildroot configuration to build a v86 compatible minimal Linux system containing PostgreSQL
 
-## Getting started
+## :zap: Getting started
 
 The goal of this build process is to produce a `filesystem` folder containing a full Linux filesystem that will be mounted and served by v86
 
@@ -25,17 +25,17 @@ The goal of this build process is to produce a `filesystem` folder containing a 
   # Launch menuconfig
   make menuconfig
   # Save the changes back to the host
-  cp .config /pg-wasm/.config
+  cp .config /pg-browser/.config
 
   # Linux kernel config
   # IMPORTANT: If it's the first time you run this command,
   # exit the linux-menuconfig when it opens and copy the host file by running
-  # cp /pg-wasm/board/pg-wasm/linux.conf ./output/build/linux-5.17.15/.config
+  # cp /pg-browser/board/pg-browser/linux.conf ./output/build/linux-5.17.15/.config
   # then you can go back to "make linux-menuconfig" to edit this configuration
   # Launch menuconfig
   make linux-menuconfig
   # Save the changes back to the host
-  cp output/build/linux-5.17.15/.config /pg-wasm/board/pg-wasm/linux.conf
+  cp output/build/linux-5.17.15/.config /pg-browser/board/pg-browser/linux.conf
   ```
 
 2. Build the `filesystem` folder:
