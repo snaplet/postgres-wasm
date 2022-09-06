@@ -29,7 +29,7 @@ The goal of this build process is to produce a `filesystem` folder containing a 
 
   # Linux kernel config
   # IMPORTANT: If it's the first time you run this command,
-  # exit the linux-menuconfig and copy the host file by running
+  # exit the linux-menuconfig when it opens and copy the host file by running
   # cp /pg-wasm/board/pg-wasm/linux.conf ./output/build/linux-5.17.15/.config
   # then you can go back to "make linux-menuconfig" to edit this configuration
   # Launch menuconfig
