@@ -1,7 +1,7 @@
 
-# pg-wasm
+# :elephant: pg-browser :globe_with_meridians:
 
-> Run [PostgreSQL](https://www.postgresql.org/) in the browser
+> Web shell to interact with [PostgreSQL](https://www.postgresql.org/) in the browser
 
 ## :zap: Getting started
 

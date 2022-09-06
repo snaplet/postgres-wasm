@@ -1,5 +1,5 @@
 {
-  "name": "@snaplet/pg-wasm",
+  "name": "@snaplet/pg-browser",
   "version": "0.0.1",
   "description": "PostgresQL running in the browser via WebAssembly",
   "main": "src/index.js",
@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/snaplet/pg-wasm.git"
+    "url": "git+https://github.com/snaplet/pg-browser.git"
   },
   "keywords": [
     "postgresql",
     "wasm"
   ],
-  "homepage": "https://github.com/snaplet/pg-wasm#readme",
+  "homepage": "https://github.com/snaplet/pg-browser#readme",
   "bin": {
-    "@snaplet/pg-wasm": "./bin/pg-wasm.js"
+    "@snaplet/pg-browser": "./bin/pg-browser.js"
   }
 }
