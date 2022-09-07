@@ -58,7 +58,6 @@
 
             if (!boot) {
                 emulator.add_listener("emulator-ready", function () {
-                    console.log(window)
                     const fitAddon = new FitAddon.FitAddon();
                     emulator.serial_adapter.term.loadAddon(fitAddon);
                     fitAddon.fit();
