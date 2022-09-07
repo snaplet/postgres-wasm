@@ -3,7 +3,7 @@
 ## :zap: Getting started
 
 ```bash
-cd pg-browser && npx serve
+cd packages/pg-browser && npx serve
 ```
 
 Go to http://localhost:3000 and have fun!

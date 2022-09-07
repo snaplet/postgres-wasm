@@ -15,7 +15,7 @@
 2. Synchronize the new filesystem using:
 
 ```bash
-./scritps/sync.sh
+./scritps/sync-fs.sh
 ```
 
 3. [Cold boot and save a new snapshot](#cold-boot-and-saving-a-new-snapshot)
