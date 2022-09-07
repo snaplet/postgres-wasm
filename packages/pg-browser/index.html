@@ -71,7 +71,7 @@
                 });
 
                 function handleBoot(line) {
-                    if (line === "postgres=# boot_completed\r\n") {
+                    if (line.startsWith("postgres=# boot_completed")) {
                         emulator.remove_listener(handleBoot);
                         setTimeout(() => {
                             document.getElementById("terminal").style = 'filter: none;';
