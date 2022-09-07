@@ -61,6 +61,7 @@
                     const fitAddon = new FitAddon.FitAddon();
                     emulator.serial_adapter.term.loadAddon(fitAddon);
                     fitAddon.fit();
+                    window.addEventListener("resize", () => fitAddon.fit());
                     // emulator.serial_adapter.term.setOption("allowTransparency", true);
                     // emulator.serial_adapter.term.setOption("theme", { background: "transparent" });
                     setTimeout(() => {
