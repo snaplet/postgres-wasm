@@ -16,6 +16,7 @@ Go to http://localhost:3000 and have fun!
 
 - [pg-browser](/packages/pg-browser)
 - [Buildroot](/packages/buildroot)
+- [Websockproxy](/packages/websockproxy)
 
 ## :clap: Aknowledgements
 
@@ -23,3 +24,4 @@ Go to http://localhost:3000 and have fun!
 - [crunchydata playground](https://www.crunchydata.com/developers/playground) for leading the way and showing the world that it was possible to run PostgreSQL in the browser
 - [browser-shell](https://github.com/humphd/browser-shell) which was already way ahead of its time, especially on the filesystem part
 - [browser-linux](https://github.com/Darin755/browser-linux) for showing us how we can make the pieces fit together
+- [Websockets Proxy](https://github.com/benjamincburns/websockproxy) the ingenious workaround that opened up the world for **v86** emulators everywhere
