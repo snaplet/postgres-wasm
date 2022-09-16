@@ -32,7 +32,7 @@ docker rm -f relay && docker run --privileged --network host --name relay burggr
 ```
 
 and point jor1k, your VPN client, or your emulator of choice at
-ws://YOUR_HOSTNAME:8080/
+ws://YOUR_HOSTNAME/
 
 Note that the container must be run in priviliged mode so that it can create
 its TAP device and set up IPv4 masquerading.
