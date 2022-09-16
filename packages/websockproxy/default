@@ -1,0 +1,14 @@
+map $server_port $upstream {
+    "~(\d)(\d\d\d)$" 10.5.$1.$2:5432;
+}
+server {
+        listen 6001-6254 so_keepalive=on;
+         
+        #allow <ip_address>;
+        #deny all;
+     
+        proxy_connect_timeout 60s;
+        proxy_socket_keepalive on;
+        proxy_pass $upstream;
+}
+

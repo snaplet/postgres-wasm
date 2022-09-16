@@ -1,0 +1,13 @@
+[Unit]
+Description=jor1k relay service
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker run --rm --privileged -p 8080:80 --name jor1k-relay benjamincburns/jor1k-relay:latest
+
+RestartSec=2min
+
+[Install]
+WantedBy=multi-user.target 

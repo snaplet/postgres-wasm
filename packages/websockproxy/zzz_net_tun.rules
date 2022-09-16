@@ -1,0 +1,1 @@
+KERNEL=="tun", GROUP="netdev", MODE="0660", OPTIONS+="static_node=net/tun"
