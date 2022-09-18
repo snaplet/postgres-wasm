@@ -24,7 +24,8 @@
 
 1. Go the `http://localhost:3000?boot=true`
 
-2. Once the boot is completed, clear the cache running `echo 3 > /proc/sys/vm/drop_caches && reset`
+2. Once the boot is completed, clear the cache running:
+ `echo 3 > /proc/sys/vm/drop_caches && echo 3 > /proc/sys/kernel/printk && reset`
 
 3. Save the state to a file clicking the `Save state to file` button
 
