@@ -21,7 +21,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
 RUN apt-get install -y nano && apt-get install -y nginx
 
 COPY nginx.conf /etc/nginx
-COPY default /etc/nginx/sites-enabled
+#COPY default /etc/nginx/sites-enabled ## moved this block to nginx.conf
 #EXPOSE 80
 
 CMD /opt/websockproxy/docker-startup.sh
