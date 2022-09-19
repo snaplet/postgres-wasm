@@ -1,0 +1,2 @@
+# kill -9 `pidof exe` &> /dev/null
+/usr/bin/watcher.sh &> /dev/null &
