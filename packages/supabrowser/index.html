@@ -1,120 +1,261 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport"
-        content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Supabase WASM: PostgreSQL in the Browser</title>
-    <link rel="stylesheet" href="https://unpkg.com/xterm@4.19.0/css/xterm.css" />
-    <link rel="stylesheet" href="styles.css" />
-    <script src="https://unpkg.com/xterm@4.19.0/lib/xterm.js"></script>
-    <script src="./js/libv86.js"></script>
-    <script src="./js/idb-storage.min.js"></script>
-    <script src="./js/script.js"></script>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Supabase WASM: PostgreSQL in the Browser</title>
+  <link rel="stylesheet" href="https://unpkg.com/xterm@4.19.0/css/xterm.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+  />
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.5.0/css/all.min.css"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="site.css" />
+  <script src="https://unpkg.com/xterm@4.19.0/lib/xterm.js"></script>
+  <script src="./js/libv86.js"></script>
+  <script src="./js/idb-storage.min.js"></script>
+  <script src="./js/script.js"></script>
 </head>
 
 <body>
-
-    <div id="header" class="header">
-        <div class="menubutton" onclick="openNav()">
-            <img src="img/menu-30-white.png" style="height: 100%" />
+  <main class="columns h-full">
+    <div id="main" class="column">
+      <div class="p-2">
+        <div id="screen_container" style="display: none">
+          <div></div>
+          <canvas></canvas>
         </div>
+        <div id="terminal" class="bg-black" style="filter: blur(3px)"></div>
 
-        <span class="topbar" id="topbar">Postgres in the Browser</span>
-
-    </div>
-
-    <div id="main">
-        <div id="screen_container" style="display:none">
-            <div></div>
-            <canvas></canvas>
-            <hr />
-        </div>
-        <div id="terminal" style="filter: blur(3px);"></div>
-        </div>
-        
         <div id="statusbar">
-            <div class="progress" id="progress"></div>
-            <div class="IP" id="IP"></div>
+          <div class="progress" id="progress"></div>
+          <div class="IP" id="IP"></div>
         </div>
+      </div>
     </div>
 
+    <div id="mySidenav" class="sidenav column is-one-quarter h-full">
+      <div class="menu-content p-2">
+        <h2 class="title is-5">Display</h2>
 
-    <div id="mySidenav" class="sidenav">
-        <div class="sidenavheader">
-            <span class="closebtn" onclick="closeNav()">&times;</span>
+        <div class="field">
+          <label class="label">Font Size</label>
+
+          <div class="control">
+            <div class="field has-addons">
+              <div class="control is-expanded">
+                <div class="select is-fullwidth">
+                  <select name="fontsize" id="fontsize" class="is-fullwidth">
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="10">11</option>
+                    <option value="12">12</option>
+                    <option value="14">14</option>
+                    <option value="16">16</option>
+                    <option value="18">18</option>
+                    <option value="20">20</option>
+                    <option value="22">22</option>
+                    <option value="24">24</option>
+                    <option value="26">26</option>
+                    <option value="28">28</option>
+                    <option value="30">30</option>
+                  </select>
+                </div>
+              </div>
+              <div class="control">
+                <button
+                  type="submit"
+                  class="button is-dark"
+                  onclick="updateFontSize()"
+                >
+                  Update
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="menucontent">
-            <a href="#">Save State to File</a>
 
-            <button class="button-37" role="button" onclick="save_file()">Save</button><br/>
-            <input type="text" id="save_filename" class="input-box spacebelow" value="" placeholder="enter filename"><br/>
-            <button class="button-37" role="button" onclick="document.getElementById('restore_file').click()">Restore</button>
-            <input type='file' id="restore_file" style="display:none">
+        <h2 class="title is-5 mt-6">Virtual Machine</h2>
 
-            <a href="#">Save State to IndexedDB</a>
+        <div class="field">
+          <label class="label">Memory Size</label>
 
-            <button class="button-38 spacebelow" role="button" onclick="emulator.save()">Save</button>
-            <button class="button-38 spacebelow" role="button" onclick="emulator.clearState()">Clear</button>
-            <button class="button-38" role="button" onclick="emulator.restore()">Restore</button>
+          <div class="field has-addons">
+            <div class="control is-expanded">
+              <div class="select is-fullwidth">
+                <select name="memorysize" id="memorysize" class="select">
+                  <option value="128">128mb</option>
+                  <option value="196">196mb</option>
+                  <option value="256">256mb</option>
+                  <option value="384">384mb</option>
+                  <option value="512">512mb</option>
+                  <option value="1024">1024mb</option>
+                </select>
+              </div>
+            </div>
+          </div>
 
-            
-            <a href="#">Network</a>
-
-
-            <button class="button-37 spacebelow" role="button" onclick="get_new_ip()">Start Network</button>
-            <button class="button-38 spacebelow" role="button" onclick="stop_network()">Stop Network</button>
-
-            <a href="#">Transfer Files</a>
-
-            <button class="button-37 spacebelow" role="button" onclick="document.getElementById('upload_files').click()">Upload Files</button>
-            <button class="button-38" role="button" id="read_file">Download File</button>
-            <input type="text" id="read_file_name" class="input-box" value="" placeholder="enter path to file">
-            <input type='file' id="upload_files" style="display:none" multiple>
-
-            <a href="#">Reset</a>
-
-            <select name="memorysize" id="memorysize" class="selectobject spacebelow">
-                <option value="128">128mb</option>
-                <option value="196">196mb</option>
-                <option value="256">256mb</option>
-                <option value="384">384mb</option>
-                <option value="512">512mb</option>
-                <option value="1024">1024mb</option>
-            </select>
-            <select name="fullboot" id="fullboot" class="selectobject spacebelow">
-                <option value="false" selected>Quick Boot</option>
-                <option value="true">Full Boot</option>
-            </select>
-            <button class="button-38" role="button" onclick="updateMemorySize()">Reset</button>
-
-            <a href="#">Font Size</a>
-
-            <select style="width: 40%;" name="fontsize" id="fontsize" class="selectobject spacebelow">
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="10">11</option>
-                <option value="12">12</option>
-                <option value="14">14</option>
-                <option value="16">16</option>
-                <option value="18">18</option>
-                <option value="20">20</option>
-                <option value="22">22</option>
-                <option value="24">24</option>
-                <option value="26">26</option>
-                <option value="28">28</option>
-                <option value="30">30</option>
-            </select>
-            <button style="width: 58%;" class="button-38" role="button" onclick="updateFontSize()">Set Font</button>
-            <br/><br/>
-            <button class="button-38" role="button">About this App</button>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-
+          <div class="field">
+            <button
+              class="button is-fullwidth is-dark"
+              role="button"
+              onclick="updateMemorySize('quick')"
+            >
+              Quick boot
+            </button>
+          </div>
+          <div class="field">
+            <button
+              class="button is-fullwidth is-dark"
+              role="button"
+              onclick="updateMemorySize('full')"
+            >
+              Full boot
+            </button>
+          </div>
         </div>
+
+        <div class="field">
+          <label class="label">Network</label>
+
+          <div class="field has-addons">
+            <p class="control is-expanded">
+              <button
+                class="button is-fullwidth is-dark"
+                role="button"
+                onclick="get_new_ip()"
+              >
+                Start
+              </button>
+            </p>
+            <p class="control is-expanded">
+              <button
+                class="button is-fullwidth is-dark"
+                role="button"
+                onclick="stop_network()"
+              >
+                Stop
+              </button>
+            </p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Transfer Files</label>
+          <input type="file" id="upload_files" style="display: none" multiple />
+
+          <div class="field has-addons is-fullwidth">
+            <div class="control is-expanded">
+              <input
+                id="read_file_name"
+                class="input"
+                type="text"
+                placeholder="Path to file"
+              />
+            </div>
+            <div class="control">
+              <button
+                class="button is-dark"
+                onclick="document.getElementById('upload_files').click()"
+              >
+                <span class="icon is-small">
+                  <i class="fas fa-upload"></i>
+                </span>
+              </button>
+            </div>
+            <div class="control">
+              <button class="button is-dark">
+                <span class="icon is-small">
+                  <i class="fas fa-download"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="title is-5 mt-6">VM State</h2>
+
+        <div class="field">
+          <label class="label">File</label>
+
+          <div class="field has-addons">
+            <div class="control is-expanded">
+              <input
+                type="text"
+                id="save_filename"
+                class="input"
+                value=""
+                placeholder="Enter filename"
+              />
+            </div>
+            <div class="control">
+              <button
+                class="button is-fullwidth is-dark"
+                role="button"
+                onclick="save_file()"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+          <div>
+            <button
+              class="button is-fullwidth is-dark"
+              role="button"
+              onclick="document.getElementById('restore_file').click()"
+            >
+              Restore from file
+            </button>
+            <input
+              class="file-input"
+              type="file"
+              id="restore_file"
+              style="display: none"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">IndexDB</label>
+
+          <div class="field">
+            <button
+              class="button is-fullwidth is-dark"
+              role="button"
+              onclick="emulator.save()"
+            >
+              Save to IndexDB
+            </button>
+          </div>
+          <div class="field">
+            <button
+              class="button is-fullwidth is-dark"
+              role="button"
+              onclick="emulator.restore()"
+            >
+              Restore from IndexDB
+            </button>
+          </div>
+          <div class="field">
+            <button
+              class="button is-fullwidth is-dark"
+              role="button"
+              onclick="emulator.clearState()"
+            >
+              Clear IndexDB
+            </button>
+          </div>
+        </div>
+
+        <!-- End Sidebar items -->
+      </div>
     </div>
-
+  </main>
 </body>
