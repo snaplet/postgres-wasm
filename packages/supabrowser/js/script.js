@@ -3,6 +3,7 @@ let config = {
   font_size: 15,
   memory_size: 128,
   save_filename: "state.bin",
+  proxy_url: '',
   // vga_memory_size: 2,
 };
 const storage = idbStorage.createIDBStorage({
@@ -15,6 +16,9 @@ window.onload = () => {
   try {
     if (saved_config) {
       config = JSON.parse(saved_config);
+      if (!config.proxy_url) {
+        config.proxy_url = "wss://proxy.supabrowser.com/";
+      }
       console.log("config loaded from localStorage", config);
     }
   } catch (err) {
@@ -23,6 +27,7 @@ window.onload = () => {
   let memorysizeElement = document.getElementById("memorysize");
   memorysizeElement.value = config.memory_size;
   document.getElementById("fontsize").value = config.font_size;
+  document.getElementById("proxy_url").value = config.proxy_url;
   document.getElementById("save_filename").value =
     config.save_filename || "state.bin";
   const baseOptions = {
@@ -35,7 +40,7 @@ window.onload = () => {
     screen_container: document.getElementById("screen_container"),
     serial_container_xtermjs: document.getElementById("terminal"),
     // network_relay_url: "wss://relay.widgetry.org/", // For non localhost: wss://relay.widgetry.org/
-    network_relay_url: "wss://proxy.supabrowser.com/",
+    network_relay_url: config.proxy_url || "wss://proxy.supabrowser.com/",
     preserve_mac_from_state_image: false,
     mac_address_translation: false,
     autostart: true,
@@ -188,6 +193,11 @@ window.onload = () => {
   });
 
   var state;
+  document.getElementById("proxy_url").onchange = function (e) {
+    const url = e.target.value;
+    console.log("url", url);
+    config.network_relay_url = url;
+  }
 
   document.getElementById("upload_files").onchange = function (e) {
     console.log("upload_files", e.target.files);
@@ -221,7 +231,8 @@ window.onload = () => {
     }
   };
 
-  document.getElementById("read_file").onclick = async function () {
+  emulator.download_file = () => {
+    console.log('** emulator.download_file');
     const path = document.getElementById("read_file_name").value;
     console.log("read_file_name", document.getElementById("read_file_name"));
     console.log("trying to download path", path);
@@ -294,6 +305,7 @@ function updateMemorySize(bootOperation) {
   const newMemorySize = document.getElementById("memorysize").value;
   try {
     config.memory_size = parseInt(newMemorySize, 10) || 96;
+    config.proxy_url = document.getElementById('proxy_url').value;
     if (!config.memory_size || config.memory_size < 96) {
       config.memory_size = 96;
       document.getElementById("memorysize").value = config.memory_size;
@@ -363,11 +375,12 @@ async function get_address() {
       const arr = result.split(".");
       // pad arr[3] with leading zeros
       arr[3] = arr[3].padStart(3, "0");
+      let proxy_domain = config.proxy_url.split("//")[1] || "NO_PROXY";
+
       document.getElementById("IP").innerHTML =
         "IP: " +
         result +
-        `&nbsp;&nbsp;psql 
-postgres://postgres@proxy.supabrowser.com:${arr[2]}${arr[3]}`;
+        `<br/>psql postgres://postgres@${proxy_domain}:${arr[2]}${arr[3]}`;
 
       console.log("got address", result);
       get_address_counter = 0;
