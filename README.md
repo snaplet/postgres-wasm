@@ -1,5 +1,7 @@
 # :elephant: PostgreSQL, in your browser :globe_with_meridians:
 
+`postgres-browser` uses WASM to run a full Postgres database inside the browser. 
+
 ## :zap: Getting started
 
 ```bash
@@ -18,7 +20,7 @@ Go to http://localhost:3000 and have fun!
 - [Buildroot](/packages/buildroot)
 - [Websockproxy](/packages/websockproxy)
 
-## :clap: Aknowledgements
+## :clap: Acknowledgements
 
 - [v86](https://github.com/copy/v86) which is **the** emulator for running x86 operating systems in the browser, without it none of the following projects would be possible
 - [crunchydata playground](https://www.crunchydata.com/developers/playground) for leading the way and showing the world that it was possible to run PostgreSQL in the browser
