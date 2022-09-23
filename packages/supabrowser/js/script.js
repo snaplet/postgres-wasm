@@ -3,6 +3,7 @@ let config = {
 	font_size: 15,
 	memory_size: 128,
 	save_filename: 'state.bin',
+	proxy_url: 'wss://proxy.supabrowser.com/'
 	// vga_memory_size: 2,
 }
 const storage = idbStorage.createIDBStorage({
@@ -15,14 +16,18 @@ window.onload = () => {
 	try {
 		if (saved_config) {
 			config = JSON.parse(saved_config)
+			if (!config.proxy_url) {
+				config.proxy_url = 'wss://proxy.supabrowser.com/';
+			}
 			console.log('config loaded from localStorage', config)
 		}
 	} catch (err) {
 		console.error('error restoring config from localStorage', err)
 	}
 	let memorysizeElement = document.getElementById('memorysize')
-	memorysizeElement.value = config.memory_size
-	document.getElementById('fontsize').value = config.font_size
+	memorysizeElement.value = config.memory_size;
+	document.getElementById('fontsize').value = config.font_size;
+	document.getElementById('proxy_url').value = config.proxy_url;
 	document.getElementById('save_filename').value = config.save_filename || 'state.bin'
 	const baseOptions = {
 		wasm_path: './js/v86.wasm',
@@ -34,7 +39,7 @@ window.onload = () => {
 		screen_container: document.getElementById('screen_container'),
 		serial_container_xtermjs: document.getElementById('terminal'),
 		// network_relay_url: "wss://relay.widgetry.org/", // For non localhost: wss://relay.widgetry.org/
-		network_relay_url: 'wss://proxy.supabrowser.com/',
+		network_relay_url: config.proxy_url,
 		preserve_mac_from_state_image: false,
 		mac_address_translation: false,
 		autostart: true,
@@ -278,6 +283,7 @@ function updateFontSize() {
 function updateMemorySize() {
 	const fullboot = document.getElementById('fullboot').value === 'true'
 	const newMemorySize = document.getElementById('memorysize').value
+	config.proxy_url = document.getElementById('proxy_url').value || 'wss://proxy.supabrowser.com/';
 	try {
 		config.memory_size = parseInt(newMemorySize, 10) || 96
 		if (!config.memory_size || config.memory_size < 96) {
