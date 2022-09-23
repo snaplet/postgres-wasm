@@ -85,44 +85,6 @@
         <h2 class="title is-5 mt-6">Virtual Machine</h2>
 
         <div class="field">
-          <label class="label">Memory Size</label>
-
-          <div class="field has-addons">
-            <div class="control is-expanded">
-              <div class="select is-fullwidth">
-                <select name="memorysize" id="memorysize" class="select">
-                  <option value="128">128mb</option>
-                  <option value="196">196mb</option>
-                  <option value="256">256mb</option>
-                  <option value="384">384mb</option>
-                  <option value="512">512mb</option>
-                  <option value="1024">1024mb</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div class="field">
-            <button
-              class="button is-fullwidth is-dark"
-              role="button"
-              onclick="updateMemorySize('quick')"
-            >
-              Quick boot
-            </button>
-          </div>
-          <div class="field">
-            <button
-              class="button is-fullwidth is-dark"
-              role="button"
-              onclick="updateMemorySize('full')"
-            >
-              Full boot
-            </button>
-          </div>
-        </div>
-
-        <div class="field">
           <label class="label">Network</label>
 
           <div class="field has-addons">
@@ -252,6 +214,61 @@
               Clear IndexDB
             </button>
           </div>
+        </div>
+
+        <h2 class="title is-5 mt-6">VM Config</h2>
+
+        <div class="field">
+          <label class="label">Memory Size</label>
+
+          <div class="field has-addons">
+            <div class="control is-expanded">
+              <div class="select is-fullwidth">
+                <select name="memorysize" id="memorysize" class="select">
+                  <option value="128">128mb</option>
+                  <option value="196">196mb</option>
+                  <option value="256">256mb</option>
+                  <option value="384">384mb</option>
+                  <option value="512">512mb</option>
+                  <option value="1024">1024mb</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Network Proxy</label>
+
+          <div class="field">
+            <input
+              type="text"
+              id="proxy_url"
+              class="input"
+              placeholder="wss://proxy.url"
+            />
+          </div>
+        </div>
+
+        <hr />
+
+        <div class="field">
+          <button
+            class="button is-fullwidth is-dark"
+            role="button"
+            onclick="updateMemorySize('quick')"
+          >
+            Quick boot
+          </button>
+        </div>
+        <div class="field">
+          <button
+            class="button is-fullwidth is-dark"
+            role="button"
+            onclick="updateMemorySize('full')"
+          >
+            Full boot
+          </button>
         </div>
 
         <!-- End Sidebar items -->
