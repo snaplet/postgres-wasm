@@ -28,7 +28,7 @@ basic NAT functionality and dnsmasq for DHCP support.
 To set up the relay via docker simply run
 
 ```shell
-docker rm -f relay && docker run --privileged --network host --name relay burggraf/pg_browser_websockproxy:1.0.4
+docker rm -f relay && docker run --privileged --network host --name relay burggraf/pg_browser_websockproxy:1.0.5
 ```
 
 and point jor1k, your VPN client, or your emulator of choice at
