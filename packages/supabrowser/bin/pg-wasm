@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+const httpServer = require("http-server");
+const argv = require("minimist")(process.argv.slice(2));
+
+const server = httpServer.createServer();
+
+const port = argv.p || 8081;
+const host = argv.h || "0.0.0.0";
+
+if (argv._.includes("start")) {
+  server.listen(port, host, () => {
+    console.log(`Listening on port ${port}`);
+  });
+}
