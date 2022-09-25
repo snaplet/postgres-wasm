@@ -66,7 +66,7 @@ window.onload = () => {
     ...(boot
       ? {
           bzimage: {
-            url: "./filesystem/d60050d7.bin",
+            url: "./filesystem/4654d3c9.bin",
           },
           cmdline: [
             "rw",
