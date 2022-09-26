@@ -1,8 +1,8 @@
 <div align="center">
   <h1 align="center">Postgres Browser</h1>
   <p align="center">A PostgresQL server instance running in a virtual machine running in the browser by Supabase &amp; Snaplet</p>
-  <img align="center" src="https://user-images.githubusercontent.com/44849/192262287-29d1ecb2-8ff7-40cb-bd1f-68d707493a86.png" alt="Snaplet, Supabase and friends" width="320">
-  <br />
+  <img align="center" src="https://user-images.githubusercontent.com/44849/192262287-29d1ecb2-8ff7-40cb-bd1f-68d707493a86.png" alt="Snaplet, Supabase and friends" width="480">
+  <br /><br />
   <a href="about:blank">Demo</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://app.snaplet.dev/chat">Discord</a>
@@ -25,7 +25,7 @@ Go to http://localhost:3000 and have fun!
 
 This repo is split into three packages that build up the environment for running PostgresQL in the browser.
 
-- [pg-browser](/packages/runtime): The v86 emulator that starts the `buildroot` image
+- [runtime](/packages/runtime): The v86 emulator that starts the `buildroot` image
 - [Buildroot](/packages/buildroot): Scripts to build the CPU and memory snapshot run by v86.
 - [Websockproxy](/packages/websockproxy): Networking
 
