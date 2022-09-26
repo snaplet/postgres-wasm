@@ -75,7 +75,6 @@
                     if (line.startsWith("postgres=# boot_completed")) {
                         emulator.remove_listener(handleBoot);
                         setTimeout(() => {
-                            document.getElementById("terminal").style = 'filter: none;';
                             emulator.serial_adapter.term.focus();
                         }, 300);
                     }
@@ -165,7 +164,7 @@
     <hr />
     <div class="container">
         <div class="xterminal">
-            <div id="terminal" style="filter: blur(3px);"></div>
+            <div id="terminal"></div>
         </div>
     </div>
 </body>
