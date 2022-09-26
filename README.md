@@ -1,26 +1,36 @@
-# :elephant: PostgreSQL, in your browser :globe_with_meridians:
+<div align="center">
+  <h1 align="center">Postgres Browser</h1>
+  <p align="center">A PostgresQL server instance running in a virtual machine running in the browser<br />
+  <i>by Supabase &amp; Snaplet</i></p>
+  <img align="center" src="https://user-images.githubusercontent.com/44849/192262287-29d1ecb2-8ff7-40cb-bd1f-68d707493a86.png" alt="Snaplet, Supabase and friends" width="480">
+  <br /><br />
+  <a href="about:blank">Demo</a>
+  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+  <a href="https://app.snaplet.dev/chat">Discord</a>
+  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+  <a href="https://www.snaplet.dev/">Snaplet</a>
+  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+  <a href="https://www.supabase.com">Supabase</a>
+</div>
+<br />
 
-`postgres-browser` uses WASM to run a full Postgres database inside the browser. 
+## Quickstart
 
-## :zap: Getting started
-
-```bash
-cd packages/pg-browser && npx serve
+```terminal
+cd packages/runtime && npx serve
 ```
 
 Go to http://localhost:3000 and have fun!
 
-## :brain: Architecture
+## Packages
 
-> TODO
+This repo is split into three packages that build up the environment for running PostgresQL in the browser.
 
-## :eyes: Going further
+- [runtime](/packages/runtime): The v86 emulator that starts the `buildroot` image
+- [Buildroot](/packages/buildroot): Scripts to build the CPU and memory snapshot run by v86.
+- [Websockproxy](/packages/websockproxy): Networking
 
-- [pg-browser](/packages/pg-browser)
-- [Buildroot](/packages/buildroot)
-- [Websockproxy](/packages/websockproxy)
-
-## :clap: Acknowledgements
+## Acknowledgements
 
 - [v86](https://github.com/copy/v86) which is **the** emulator for running x86 operating systems in the browser, without it none of the following projects would be possible
 - [crunchydata playground](https://www.crunchydata.com/developers/playground) for leading the way and showing the world that it was possible to run PostgreSQL in the browser
