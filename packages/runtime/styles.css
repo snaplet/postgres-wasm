@@ -24,7 +24,6 @@ body {
 	width: calc(80ch + 16px * 2);
 	height: 60%;
 	background: black;
-	/* linear-gradient(0deg, #000, #272727); */
 	border-radius: 7px;
 	display: flex;
 }
@@ -42,7 +41,6 @@ body {
 	width: calc(100% + 2px);
 	height: calc(100% + 2px);
 	z-index: -1;
-	animation: steam 120s linear infinite;
 }
 
 .xterm .xterm-viewport {
@@ -60,19 +58,6 @@ body {
 	background: var(--highlight);
 }
 
-@keyframes steam {
-	0% {
-		background-position: 0 0;
-	}
-
-	50% {
-		background-position: 400% 0;
-	}
-
-	100% {
-		background-position: 0 0;
-	}
-}
 
 .xterminal:after {
 	filter: blur(50px);
