@@ -1,0 +1,34 @@
+Derek Foreman <derek@signalmarketing.com>
+Ben Jansens <xor@orodu.net>
+Thomas Schmitt <scdbackup@gmx.net>
+Mario Danic <mario.danic@gmail.com>,
+Vreixo Formoso <metalpain2002@yahoo.es> 
+Steve McIntyre <steve@einval.com>
+George Danchev <danchev@spnet.net>
+
+GNU xorriso is a compilation of modules from libburnia-project.org :
+xorriso     Copyright (C) 2007-2012 Thomas Schmitt
+libisoburn  Copyright (C) 2007-2012 Vreixo Formoso, Thomas Schmitt
+libisofs    Copyright (C) 2007-2012 Vreixo Formoso, Mario Danic, Thomas Schmitt
+libburn     Copyright (C) 2002-2006 Derek Foreman, Ben Jansens
+                          2006-2012 Mario Danic, Thomas Schmitt
+Further included is :
+libjte      Copyright (C) 2000-2007 Free Software Foundation, Inc.
+                          2004-2011 Steve McIntyre
+                          2010-2011 George Danchev, Thomas Schmitt
+
+Originally they all are licensed directly or indirectly as GPLv2+.
+GNU xorriso is licensed by the following statement:
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 3
+    or later as published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
