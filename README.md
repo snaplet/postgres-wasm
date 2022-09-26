@@ -1,6 +1,7 @@
 <div align="center">
   <h1 align="center">Postgres Browser</h1>
-  <p align="center">A PostgresQL server instance running in a virtual machine running in the browser by Supabase &amp; Snaplet</p>
+  <p align="center">A PostgresQL server instance running in a virtual machine running in the browser<br />
+  <i>by Supabase &amp; Snaplet</i></p>
   <img align="center" src="https://user-images.githubusercontent.com/44849/192262287-29d1ecb2-8ff7-40cb-bd1f-68d707493a86.png" alt="Snaplet, Supabase and friends" width="480">
   <br /><br />
   <a href="about:blank">Demo</a>
