@@ -106,7 +106,7 @@ There are two options for restarting the emulator to apply the currently selecte
 
 ### Quick Boot
 Quick boot uses the `initial_state` option of `V86Starter` to quickly load a compressed state file:
-```json
+```
 initial_state: {
     url: "./state/state-128.bin.zst"
 }
@@ -115,7 +115,7 @@ initial_state: {
 ### Full Boot
 A full boot of the emulator does not use a state file, but instead sets the location of the kernel `bzimage` stored in the virtual filesystem, a set of kernel `cmdline` parameters, a `bios` file, and a `vga_bios` file used to boot the virtual machine:
 
-```json
+```
 bzimage: {
     url: "./filesystem/12345678.bin",
 },
