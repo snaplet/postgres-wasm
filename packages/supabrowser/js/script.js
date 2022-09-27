@@ -129,6 +129,9 @@ window.onload = () => {
       }, 2000);
     });
   }
+  
+  preloader(); // run a command to preload postgres command cache
+
   emulator.clearState = async function () {
     await storage.delete("state-" + config.memory_size);
   };
@@ -355,6 +358,9 @@ function get_new_ip() {
   );
   setTimeout(get_address, 2000);
 }
+function preloader() {
+  send_script("preloader", `psql -U postgres -c "\dt"`);
+}
 
 let get_address_counter = 0;
 async function get_address() {
@@ -435,4 +441,18 @@ async function save_file() {
 
   this.blur();
   localStorage.setItem("config", JSON.stringify(config));
+}
+function sendCharCode(charString) {
+  emulator.serial0_send(charString);
+}
+
+function toggle_virtual_keyboard() {
+  const el = document.getElementById("virtual_keyboard");
+  if (el.style.display === "none") {
+    el.style.display = "block";
+    document.getElementById("keyboard_toggle_2").style.display = "none";
+  } else {
+    el.style.display = "none";
+    document.getElementById("keyboard_toggle_2").style.display = "inline";
+  }
 }

@@ -2,20 +2,12 @@
 
 <head>
   <meta charset="utf-8" />
-  <meta
-    name="viewport"
-    content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  />
+  <meta name="viewport"
+    content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Supabase WASM: PostgreSQL in the Browser</title>
   <link rel="stylesheet" href="https://unpkg.com/xterm@4.19.0/css/xterm.css" />
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
-  />
-  <link
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.5.0/css/all.min.css"
-    rel="stylesheet"
-  />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.5.0/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="site.css" />
   <script src="https://unpkg.com/xterm@4.19.0/lib/xterm.js"></script>
   <script src="./js/libv86.js"></script>
@@ -42,7 +34,63 @@
 
     <div id="mySidenav" class="sidenav column is-one-quarter h-full">
       <div class="menu-content p-2">
-        <h2 class="title is-5">Display</h2>
+        <div id="virtual_keyboard" style="display: none; margin-top: -48px !important;">
+          <h2 class="title is-5 mt-6">
+            <button id="keyboard_toggle1" class="button is-dark" style="text-align: right; border: 1px solid white;" onclick="toggle_virtual_keyboard()">
+              <span class="icon is-small">
+                <i class="fas fa-keyboard"></i>
+              </span>
+            </button>  
+            Virtual Keyboard</h2>
+          <div class="field">
+            <div class="control">
+              <button class="button is-dark keyboard-button" onclick="sendCharCode('\x03')">
+                ^c
+              </button>
+              <button class="button is-dark keyboard-button" onclick="sendCharCode('\x1b[A')">
+                ↑
+              </button>
+              <button class="button is-dark keyboard-button" onclick="sendCharCode('\x04')">
+                ^d
+              </button>
+            </div>
+
+            <div class="control">
+              <button class="button is-dark keyboard-button" onclick="sendCharCode('\x1b[D')">
+                ←
+              </button>
+              <button class="button is-dark keyboard-button" onclick="sendCharCode('\r')">
+                ↵
+              </button>
+              <button class="button is-dark keyboard-button" onclick="sendCharCode('\x1b[C');">
+                →
+              </button>
+            </div>
+
+            <div class="control">
+              <button class="button is-dark keyboard-button" onclick="sendCharCode('\x16')">
+                ^v
+              </button>
+              <button class="button is-dark keyboard-button" onclick="sendCharCode('\x1b[B')">
+                ↓
+              </button>
+              <button class="button is-dark keyboard-button" onclick="sendCharCode('\x1a')">
+                ^z
+              </button>
+            </div>
+
+
+          </div>
+          <br/>
+        </div>
+
+        <h2 class="title is-5">
+          <button id="keyboard_toggle_2" class="button is-dark" style="text-align: right;" onclick="toggle_virtual_keyboard()">
+            <span class="icon is-small">
+              <i class="fas fa-keyboard"></i>
+            </span>
+          </button>          
+          Display</h2>
 
         <div class="field">
           <label class="label">Font Size</label>
@@ -70,11 +118,7 @@
                 </div>
               </div>
               <div class="control">
-                <button
-                  type="submit"
-                  class="button is-dark"
-                  onclick="updateFontSize()"
-                >
+                <button type="submit" class="button is-dark" onclick="updateFontSize()">
                   Update
                 </button>
               </div>
@@ -89,20 +133,12 @@
 
           <div class="field has-addons">
             <p class="control is-expanded">
-              <button
-                class="button is-fullwidth is-dark"
-                role="button"
-                onclick="get_new_ip()"
-              >
+              <button class="button is-fullwidth is-dark" role="button" onclick="get_new_ip()">
                 Start
               </button>
             </p>
             <p class="control is-expanded">
-              <button
-                class="button is-fullwidth is-dark"
-                role="button"
-                onclick="stop_network()"
-              >
+              <button class="button is-fullwidth is-dark" role="button" onclick="stop_network()">
                 Stop
               </button>
             </p>
@@ -115,18 +151,10 @@
 
           <div class="field has-addons is-fullwidth">
             <div class="control is-expanded">
-              <input
-                id="read_file_name"
-                class="input"
-                type="text"
-                placeholder="Path to file"                
-              />
+              <input id="read_file_name" class="input" type="text" placeholder="Path to file" />
             </div>
             <div class="control">
-              <button
-                class="button is-dark"
-                onclick="document.getElementById('upload_files').click()"
-              >
+              <button class="button is-dark" onclick="document.getElementById('upload_files').click()">
                 <span class="icon is-small">
                   <i class="fas fa-upload"></i>
                 </span>
@@ -149,38 +177,20 @@
 
           <div class="field has-addons">
             <div class="control is-expanded">
-              <input
-                type="text"
-                id="save_filename"
-                class="input"
-                value=""
-                placeholder="Enter filename"
-              />
+              <input type="text" id="save_filename" class="input" value="" placeholder="Enter filename" />
             </div>
             <div class="control">
-              <button
-                class="button is-fullwidth is-dark"
-                role="button"
-                onclick="save_file()"
-              >
+              <button class="button is-fullwidth is-dark" role="button" onclick="save_file()">
                 Save
               </button>
             </div>
           </div>
           <div>
-            <button
-              class="button is-fullwidth is-dark"
-              role="button"
-              onclick="document.getElementById('restore_file').click()"
-            >
+            <button class="button is-fullwidth is-dark" role="button"
+              onclick="document.getElementById('restore_file').click()">
               Restore from file
             </button>
-            <input
-              class="file-input"
-              type="file"
-              id="restore_file"
-              style="display: none"
-            />
+            <input class="file-input" type="file" id="restore_file" style="display: none" />
           </div>
         </div>
 
@@ -188,29 +198,17 @@
           <label class="label">IndexDB</label>
 
           <div class="field">
-            <button
-              class="button is-fullwidth is-dark"
-              role="button"
-              onclick="emulator.save()"
-            >
+            <button class="button is-fullwidth is-dark" role="button" onclick="emulator.save()">
               Save to IndexDB
             </button>
           </div>
           <div class="field">
-            <button
-              class="button is-fullwidth is-dark"
-              role="button"
-              onclick="emulator.restore()"
-            >
+            <button class="button is-fullwidth is-dark" role="button" onclick="emulator.restore()">
               Restore from IndexDB
             </button>
           </div>
           <div class="field">
-            <button
-              class="button is-fullwidth is-dark"
-              role="button"
-              onclick="emulator.clearState()"
-            >
+            <button class="button is-fullwidth is-dark" role="button" onclick="emulator.clearState()">
               Clear IndexDB
             </button>
           </div>
@@ -241,38 +239,31 @@
           <label class="label">Network Proxy</label>
 
           <div class="field">
-            <input
-              type="text"
-              id="proxy_url"
-              class="input"
-              placeholder="wss://proxy.url"
-            />
+            <input type="text" id="proxy_url" class="input" placeholder="wss://proxy.url" />
           </div>
         </div>
 
         <hr />
 
         <div class="field">
-          <button
-            class="button is-fullwidth is-dark"
-            role="button"
-            onclick="updateMemorySize('quick')"
-          >
+          <button class="button is-fullwidth is-dark" role="button" onclick="updateMemorySize('quick')">
             Quick boot
           </button>
         </div>
         <div class="field">
-          <button
-            class="button is-fullwidth is-dark"
-            role="button"
-            onclick="updateMemorySize('full')"
-          >
+          <button class="button is-fullwidth is-dark" role="button" onclick="updateMemorySize('full')">
             Full boot
           </button>
         </div>
 
-        <!-- End Sidebar items -->
+        <hr />
+
+
+
       </div>
+
+      <!-- End Sidebar items -->
+    </div>
     </div>
   </main>
 </body>
