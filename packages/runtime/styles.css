@@ -21,7 +21,7 @@ body {
 .xterminal {
 	position: relative;
 	padding: 16px;
-	width: calc(80ch + 16px * 2);
+	width: 60%;
 	height: 60%;
 	background: black;
 	border-radius: 7px;
