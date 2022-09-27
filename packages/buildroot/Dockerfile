@@ -1,7 +1,7 @@
 FROM rastasheep/ubuntu-sshd:18.04
 
 # Buildroot version to use
-ARG BUILD_ROOT_RELEASE=2022.08-rc1
+ARG BUILD_ROOT_RELEASE=2022.08
 
 # Root password for SSH
 ARG ROOT_PASSWORD=browser-vm
