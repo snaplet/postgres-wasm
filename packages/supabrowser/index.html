@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.5.0/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="site.css" />
+  <script src="https://unpkg.com/xterm-addon-fit@0.5.0/lib/xterm-addon-fit.js"></script>
   <script src="https://unpkg.com/xterm@4.19.0/lib/xterm.js"></script>
   <script src="./js/libv86.js"></script>
   <script src="./js/idb-storage.min.js"></script>
@@ -18,16 +19,19 @@
 <body>
   <main class="columns h-full">
     <div id="main" class="column">
-      <div class="p-2">
+      <div class="p-2" id="p-2"
+        style="height: calc(100vh - 50px); width: 100%; margin-left: 10px;">
         <div id="screen_container" style="display: none">
           <div></div>
           <canvas></canvas>
         </div>
-        <div id="terminal" class="bg-black" style="filter: blur(3px)"></div>
 
-        <div id="statusbar">
-          <div class="progress" id="progress"></div>
+        <div id="terminal" class="bg-black" 
+          style="height: calc(100vh - 50px); filter: blur(3px)"></div>
+
+        <div id="statusbar" style="position: absolute; bottom: 0; height: 50px; width: 100%;">
           <div class="IP" id="IP"></div>
+          <div class="progress" id="progress"></div>
         </div>
       </div>
     </div>

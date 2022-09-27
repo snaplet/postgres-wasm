@@ -22,6 +22,15 @@ select,
   background-color: #000;
 }
 
+.progress {
+  padding-left: 10px;
+  color: #fff;
+  height: 100%;
+}
+.IP {
+  padding-left: 10px;
+  color: #fff;
+}
 .h-full {
   height: 100%;
 }

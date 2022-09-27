@@ -118,11 +118,17 @@ window.onload = () => {
     emulator.add_listener("emulator-ready", function () {
       console.log("emulator ready!");
       updateFontSize();
+      initTerm();
 
       setTimeout(() => {
-        emulator.serial0_send("\\!/etc/init.d/S40network restart\n");
+
         emulator.serial0_send("psql -U postgres\n");
-        emulator.serial0_send('\\! echo "boot_completed"; reset\n');
+        emulator.serial0_send(`\\! stty rows ${emulator.serial_adapter.term.rows} cols ${emulator.serial_adapter.term.cols} && echo "boot_completed" && reset\n`);
+        emulator.serial_adapter.term.focus();
+
+        // emulator.serial0_send("\\!/etc/init.d/S40network restart\n");
+        // emulator.serial0_send("psql -U postgres\n");
+        // emulator.serial0_send('\\! echo "boot_completed"; reset\n');
       }, 0);
       setTimeout(() => {
         document.getElementById("terminal").style = "filter: none;";
@@ -261,6 +267,17 @@ window.onload = () => {
   };
 };
 
+function initTerm() {
+  const fitAddon = new FitAddon.FitAddon();
+  emulator.serial_adapter.term.loadAddon(fitAddon);
+  fitAddon.fit();
+  window.addEventListener("resize", () => {
+    document.getElementById("terminal")
+    .style.setProperty('height', 'calc(100vh - 50px)');
+    fitAddon.fit()
+  });
+}
+
 async function downloadFile(path) {
   const contents = await emulator.read_file(path);
   const filename = ("/" + path).split("/").pop();
@@ -342,7 +359,7 @@ function restart_network() {
 
 function stop_network() {
   send_script("stop_network", "/etc/init.d/S40network stop &> /dev/null");
-  document.getElementById("IP").innerHTML = "";
+  document.getElementById("progress").innerHTML = "";
 }
 
 let get_new_ip_counter = 0;
@@ -372,7 +389,7 @@ async function get_address() {
     result = new TextDecoder().decode(contents).replace(/\n/g, "");
   } catch (err) {
     console.log("error", err);
-    document.getElementById("IP").innerHTML = "";
+    document.getElementById("progress").innerHTML = "";
     if (err && err.message && err.message === "File not found") {
       progress_el.innerHTML = "Getting IP address...ready";
     }
@@ -389,13 +406,18 @@ async function get_address() {
         `<br/>psql postgres://postgres@${proxy_domain}:${arr[2]}${arr[3]}`;
 
       console.log("got address", result);
+      
+      console.log(        "IP: " +
+      result +
+      `<br/>psql postgres://postgres@${proxy_domain}:${arr[2]}${arr[3]}`);
+
       get_address_counter = 0;
       progress_el.innerHTML = "";
       // console.log('result =' + result + '=');
       // console.log('a get_address_counter', get_address_counter);
     } else {
       // console.log('no result');
-      document.getElementById("IP").innerHTML = "";
+      // document.getElementById("IP").innerHTML = "";
       progress_el.innerHTML = "Getting IP address..." + get_address_counter;
       // console.log('b get_address_counter', get_address_counter);
       if (get_address_counter < 10) {
@@ -413,19 +435,6 @@ async function get_address() {
   }
 }
 
-function openNav() {
-  document.getElementById("main").style.marginLeft = "250px";
-  document.getElementById("topbar").style.paddingLeft = "210px";
-  document.getElementById("statusbar").style.paddingLeft = "250px";
-  document.getElementById("mySidenav").style.width = "250px";
-}
-
-function closeNav() {
-  document.getElementById("main").style.marginLeft = "0px";
-  document.getElementById("topbar").style.paddingLeft = "20px";
-  document.getElementById("statusbar").style.paddingLeft = "0px";
-  document.getElementById("mySidenav").style.width = "0";
-}
 async function save_file() {
   console.log("save_file button pressed");
   config.save_filename =
