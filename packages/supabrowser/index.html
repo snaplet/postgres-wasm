@@ -194,12 +194,13 @@
         <h2 class="title is-5 mt-6">VM Config</h2>
 
         <div class="field">
-          <label class="label">Memory Size</label>
 
           <div class="field has-addons">
             <div class="control is-expanded">
-              <div class="select is-fullwidth">
-                <select name="memorysize" id="memorysize" class="select">
+              <label class="label">Memory & Font Size</label>
+
+              <div class="select" style="width: 48%;">
+                <select name="memorysize" id="memorysize" style="width: 100%;" class="select">
                   <option value="128">128mb</option>
                   <option value="196">196mb</option>
                   <option value="256">256mb</option>
@@ -208,7 +209,37 @@
                   <option value="1024">1024mb</option>
                 </select>
               </div>
+
+              <div class="select" style="width: 48%;">
+                <select name="fontsize" id="fontsize" style="width: 100%;" class="select" onchange="saveFontSize()">
+                  <option value="8">8pt</option>
+                  <option value="9">9pt</option>
+                  <option value="10">10pt</option>
+                  <option value="11">11pt</option>
+                  <option value="12">12pt</option>
+                  <option value="13">13pt</option>
+                  <option value="14">14pt</option>
+                  <option value="15">15pt</option>
+                  <option value="16">16pt</option>
+                  <option value="18">18pt</option>
+                  <option value="20">20pt</option>
+                  <option value="22">22pt</option>
+                  <option value="24">24pt</option>
+                  <option value="26">26pt</option>
+                  <option value="28">28pt</option>
+                  <option value="30">30pt</option>
+                </select>
+              </div>
+
+
+
             </div>
+
+
+
+
+
+
           </div>
         </div>
 
@@ -219,36 +250,6 @@
             <input type="text" id="proxy_url" class="input" placeholder="wss://proxy.url" />
           </div>
         </div>
-
-        <div class="field">
-          <label class="label">Font Size</label>
-
-          <div class="control">
-            <div class="field has-addons">
-              <div class="control is-expanded">
-                <div class="select is-fullwidth">
-                  <select name="fontsize" id="fontsize" class="is-fullwidth" onchange="saveFontSize()">
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="10">11</option>
-                    <option value="12">12</option>
-                    <option value="14">14</option>
-                    <option value="16">16</option>
-                    <option value="18">18</option>
-                    <option value="20">20</option>
-                    <option value="22">22</option>
-                    <option value="24">24</option>
-                    <option value="26">26</option>
-                    <option value="28">28</option>
-                    <option value="30">30</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
 
         <hr />
 
