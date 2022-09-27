@@ -34,7 +34,7 @@
         document.getElementById("terminal").style = "";
       }
 
-      const bzimageUrl = "./filesystem/123ccf58.bin";
+      const bzimageUrl = "./filesystem/27d6e559.bin";
       const options = {
         ...baseOptions,
         ...(boot
@@ -58,31 +58,32 @@
 
       var emulator = new V86Starter(options);
 
+      function initTerm() {
+        const fitAddon = new FitAddon.FitAddon();
+        emulator.serial_adapter.term.loadAddon(fitAddon);
+        fitAddon.fit();
+        window.addEventListener("resize", () => fitAddon.fit());
+      }
+
+      function sendBackgroundCommands(commands) {
+        const filename = `${(Math.random() + 1).toString(36).substring(7)}.sh`;
+        emulator.create_file(
+          `/inbox/${filename}`,
+          new TextEncoder("UTF-8").encode(commands.join("\n"))
+        );
+      }
+
       if (!boot) {
         emulator.add_listener("emulator-ready", function () {
-          const fitAddon = new FitAddon.FitAddon();
-          emulator.serial_adapter.term.loadAddon(fitAddon);
-          fitAddon.fit();
-          window.addEventListener("resize", () => fitAddon.fit());
-          // emulator.serial_adapter.term.setOption("allowTransparency", true);
-          // emulator.serial_adapter.term.setOption("theme", { background: "transparent" });
+          initTerm();
           setTimeout(() => {
-            emulator.serial0_send("/etc/init.d/S40network restart\n");
-            emulator.serial0_send("psql -U postgres\n");
-            emulator.serial0_send('\\! echo "boot_completed"; reset\n');
+            sendBackgroundCommands(["/etc/init.d/S40network restart"]);
+            emulator.serial0_send(
+              `\\! stty rows ${emulator.serial_adapter.term.rows} cols ${emulator.serial_adapter.term.cols} && reset\n`
+            );
+            emulator.serial_adapter.term.focus();
           }, 0);
         });
-
-        function handleBoot(line) {
-          if (line.startsWith("postgres=# boot_completed")) {
-            emulator.remove_listener(handleBoot);
-            setTimeout(() => {
-              document.getElementById("terminal").style = "filter: none;";
-              emulator.serial_adapter.term.focus();
-            }, 300);
-          }
-        }
-        emulator.add_listener("serial0-output-line", handleBoot);
       }
 
       var state;
@@ -182,8 +183,8 @@
     </div>
   </div>
   <div class="container">
-    <div class="xterminal" style="margin-right: 25px">
-      <div id="terminal" style="filter: blur(3px)"></div>
+    <div class="xterminal">
+      <div id="terminal"></div>
     </div>
   </div>
 </body>
