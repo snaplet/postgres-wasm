@@ -23,13 +23,13 @@ select,
 }
 
 .progress {
-  padding-left: 10px;
-  color: #fff;
+  padding-left: 5px;
+  color: lightgray;
   height: 100%;
 }
 .IP {
-  padding-left: 10px;
-  color: #fff;
+  padding-left: 5px;
+  color: lightgray;
 }
 .h-full {
   height: 100%;

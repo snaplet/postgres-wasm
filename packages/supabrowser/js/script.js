@@ -1,9 +1,11 @@
 var emulator;
+const fitAddon = new FitAddon.FitAddon();
+
 let config = {
   font_size: 15,
   memory_size: 128,
   save_filename: "state.bin",
-  proxy_url: '',
+  proxy_url: '' || "wss://proxy.supabrowser.com/",
   // vga_memory_size: 2,
 };
 const storage = idbStorage.createIDBStorage({
@@ -99,17 +101,32 @@ window.onload = () => {
     function handleBoot(line) {
       console.log("handleBoot =>", line);
       if (line.startsWith("server started")) {
+        console.log('**** server started ****');
         emulator.remove_listener(handleBoot);
         setTimeout(() => {
-          emulator.serial0_send("\\!/etc/init.d/S40network restart\n");
+          emulator.serial_adapter.term.options.fontSize = config.font_size;
+          emulator.serial_adapter.term.loadAddon(fitAddon);
+          document.getElementById("terminal")
+          .style.setProperty('height', 'calc(100vh - 50px)');
+          fitAddon.fit();
+          window.addEventListener("resize", () => {
+            document.getElementById("terminal")
+            .style.setProperty('height', 'calc(100vh - 50px)');
+            fitAddon.fit()
+          });
+        
+          
           emulator.serial0_send("psql -U postgres\n");
+          emulator.serial0_send(`\\! stty rows ${emulator.serial_adapter.term.rows} cols ${emulator.serial_adapter.term.cols}\n`);
           emulator.serial0_send('\\! echo "boot_completed"; reset\n');
           setTimeout(() => {
             document.getElementById("terminal").style = "filter: none;";
             document.getElementById("screen_container").style =
               "display: none;";
-            emulator.serial_adapter.term.focus();
-          }, 2000);
+
+              emulator.serial_adapter.term.focus();  
+
+            }, 2000);
         }, 1000);
       }
     }
@@ -117,7 +134,8 @@ window.onload = () => {
   } else {
     emulator.add_listener("emulator-ready", function () {
       console.log("emulator ready!");
-      updateFontSize();
+      emulator.serial_adapter.term.options.fontSize = config.font_size;
+
       initTerm();
 
       setTimeout(() => {
@@ -126,9 +144,6 @@ window.onload = () => {
         emulator.serial0_send(`\\! stty rows ${emulator.serial_adapter.term.rows} cols ${emulator.serial_adapter.term.cols} && echo "boot_completed" && reset\n`);
         emulator.serial_adapter.term.focus();
 
-        // emulator.serial0_send("\\!/etc/init.d/S40network restart\n");
-        // emulator.serial0_send("psql -U postgres\n");
-        // emulator.serial0_send('\\! echo "boot_completed"; reset\n');
       }, 0);
       setTimeout(() => {
         document.getElementById("terminal").style = "filter: none;";
@@ -172,8 +187,6 @@ window.onload = () => {
               console.log("restore result", result);
               emulator.run();
               emulator.serial_adapter.term.focus();
-              // console.log('emulator.restore calling restart_network');
-              // restart_network();
             })
             .catch(function (err) {
               console.log(err);
@@ -268,7 +281,6 @@ window.onload = () => {
 };
 
 function initTerm() {
-  const fitAddon = new FitAddon.FitAddon();
   emulator.serial_adapter.term.loadAddon(fitAddon);
   fitAddon.fit();
   window.addEventListener("resize", () => {
@@ -292,32 +304,18 @@ async function downloadFile(path) {
   a.remove();
 }
 
-function updateFontSize() {
-  console.log("FONT SIZE WAS", emulator.serial_adapter.term.options.fontSize);
-  //emulator.screen_adapter.set_size_text(document.getElementById("font_size").value, document.getElementById("font_size").value);
-  console.log("new font size", document.getElementById("fontsize").value);
+function saveFontSize() {
   try {
     config.font_size =
       parseInt(document.getElementById("fontsize").value, 10) || 14;
     if (config.font_size < 4 || config.font_size > 90) {
-      config.font_size = 15;
+      config.font_size = 16;
     }
   } catch (err) {
     console.log("error parsing font size", err);
-    config.font_size = 15;
+    config.font_size = 16;
   }
-  emulator.serial_adapter.term.options.fontSize = config.font_size;
-  if (
-    emulator.serial_adapter.term.element &&
-    emulator.serial_adapter.term.element.children[0]
-  ) {
-    //emulator.serial_adapter.term.element.children[0].style.width = 0;
-    emulator.serial_adapter.term.element.children[0].style.backgroundColor =
-      "white";
-    localStorage.setItem("config", JSON.stringify(config));
-  } else {
-    console.log("terminal not initialized, cannot update find size yet");
-  }
+  localStorage.setItem("config", JSON.stringify(config));
 }
 
 function updateMemorySize(bootOperation) {
@@ -399,7 +397,7 @@ async function get_address() {
       // pad arr[3] with leading zeros
       arr[3] = arr[3].padStart(3, "0");
       let proxy_domain = config.proxy_url.split("//")[1] || "NO_PROXY";
-
+      if (proxy_domain.endsWith('/')) proxy_domain = proxy_domain.slice(0, -1);
       document.getElementById("IP").innerHTML =
         "IP: " +
         result +
@@ -413,18 +411,12 @@ async function get_address() {
 
       get_address_counter = 0;
       progress_el.innerHTML = "";
-      // console.log('result =' + result + '=');
-      // console.log('a get_address_counter', get_address_counter);
     } else {
-      // console.log('no result');
-      // document.getElementById("IP").innerHTML = "";
       progress_el.innerHTML = "Getting IP address..." + get_address_counter;
-      // console.log('b get_address_counter', get_address_counter);
       if (get_address_counter < 10) {
         get_address_counter++;
         setTimeout(get_address, 1000);
       } else {
-        // console.log('get_address timed out');
         get_address_counter = 0;
         progress_el.innerHTML = "Getting IP address...FAILED";
         setTimeout(() => {
