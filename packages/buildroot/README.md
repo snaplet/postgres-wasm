@@ -25,7 +25,7 @@ The goal of this build process is to produce a `filesystem` folder containing a 
   # Launch menuconfig
   make menuconfig
   # Save the changes back to the host
-  cp .config /pg-browser/.config
+  cp .config /config/.config
 
   # Linux kernel config
   # IMPORTANT: If it's the first time you run this command,
@@ -35,7 +35,7 @@ The goal of this build process is to produce a `filesystem` folder containing a 
   # Launch menuconfig
   make linux-menuconfig
   # Save the changes back to the host
-  cp output/build/linux-5.17.15/.config /pg-browser/board/pg-browser/linux.conf
+  cp output/build/linux-5.17.15/.config /config/board/pg-browser/linux.conf
   ```
 
 2. Build the `filesystem` folder:
