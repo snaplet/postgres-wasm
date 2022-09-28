@@ -2,7 +2,7 @@
   <h1 align="center">Postgres WASM</h1>
   <p align="center">A PostgresQL server instance running in a virtual machine running in the browser<br />
   <i>by Supabase &amp; Snaplet</i></p>
-  <img align="center" src="https://user-images.githubusercontent.com/44849/192262287-29d1ecb2-8ff7-40cb-bd1f-68d707493a86.png" alt="Snaplet, Supabase and friends" width="480">
+  <img align="center" src="https://user-images.githubusercontent.com/90199159/192729860-730e89a9-2489-4a95-a814-25eaaebebb7d.png" alt="Snaplet, Supabase and friends" width="480">
   <br /><br />
   <a href="https://postgres-wasm.netlify.com">Demo</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
