@@ -1,170 +1,190 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <head>
-    <title>Postgres in browser</title>
-    <link rel="stylesheet" href="https://unpkg.com/xterm@4.19.0/css/xterm.css" />
-    <link rel="stylesheet" href="./styles.css" />
-    <script src="https://unpkg.com/xterm-addon-fit@0.5.0/lib/xterm-addon-fit.js"></script>
-    <script src="https://unpkg.com/xterm@4.19.0/lib/xterm.js"></script>
-    <script src="./lib/libv86.js"></script>
-    <script>
-        window.onload = () => {
-            const baseOptions = {
-                wasm_path: "./lib/v86.wasm",
-                memory_size: 128 * 1024 * 1024,
-                filesystem: {
-                    basefs: "filesystem/filesystem.json",
-                    baseurl: "filesystem/",
-                },
-                screen_container: document.getElementById("screen_container"),
-                serial_container_xtermjs: document.getElementById("terminal"),
-                network_relay_url: "wss://relay.widgetry.org/",
-                autostart: true,
-                disable_keyboard: true,
-                disable_mouse: true,
-                disable_speaker: true,
-                acpi: true,
-            };
+  <title>Postgres in browser</title>
+  <link rel="stylesheet" href="https://unpkg.com/xterm@4.19.0/css/xterm.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://unpkg.com/xterm-addon-fit@0.5.0/lib/xterm-addon-fit.js"></script>
+  <script src="https://unpkg.com/xterm@4.19.0/lib/xterm.js"></script>
+  <script src="./lib/libv86.js"></script>
+  <script>
+    window.onload = () => {
+      const baseOptions = {
+        wasm_path: "./lib/v86.wasm",
+        memory_size: 128 * 1024 * 1024,
+        filesystem: {
+          basefs: "filesystem/filesystem.json",
+          baseurl: "filesystem/",
+        },
+        screen_container: document.getElementById("screen_container"),
+        serial_container_xtermjs: document.getElementById("terminal"),
+        network_relay_url: "wss://relay.widgetry.org/",
+        autostart: true,
+        disable_keyboard: true,
+        disable_mouse: true,
+        disable_speaker: true,
+        acpi: true,
+      };
 
-            const params = (new URL(document.location)).searchParams;
-            const boot = params.get("boot") === "true";
+      const params = new URL(document.location).searchParams;
+      const boot = params.get("boot") === "true";
 
-            if (boot) {
-                document.getElementById("screen_container").style = 'display:block';
-                document.getElementById("terminal").style = '';
+      if (boot) {
+        document.getElementById("screen_container").style = "display:block";
+        document.getElementById("terminal").style = "";
+      }
+
+      const bzimageUrl = "./filesystem/27d6e559.bin";
+      const options = {
+        ...baseOptions,
+        ...(boot
+          ? {
+              bzimage: {
+                url: bzimageUrl,
+              },
+              cmdline: [
+                "rw",
+                "root=host9p rootfstype=9p rootflags=version=9p2000.L,trans=virtio,cache=loose quiet acpi=off console=ttyS0 tsc=reliable mitigations=off random.trust_cpu=on nowatchdog page_poison=on",
+              ].join(" "),
+              bios: {
+                url: "./bios/seabios.bin",
+              },
+              vga_bios: {
+                url: "./bios/vgabios.bin",
+              },
             }
+          : { initial_state: { url: "./state/v86state.bin.zst" } }),
+      };
 
-            const bzimageUrl = "./filesystem/123ccf58.bin";
-            const options = {
-                ...baseOptions,
-                ...(boot ? {
-                    bzimage: {
-                        url: bzimageUrl,
-                    },
-                    cmdline: [
-                        "rw",
-                        "root=host9p rootfstype=9p rootflags=version=9p2000.L,trans=virtio,cache=loose quiet acpi=off console=ttyS0 tsc=reliable mitigations=off random.trust_cpu=on nowatchdog page_poison=on",
-                    ].join(" "),
-                    bios: {
-                        url: "./bios/seabios.bin",
-                    },
-                    vga_bios: {
-                        url: "./bios/vgabios.bin",
-                    },
-                } : { initial_state: { url: "./state/v86state.bin.zst" } })
+      var emulator = new V86Starter(options);
+
+      function initTerm() {
+        const fitAddon = new FitAddon.FitAddon();
+        emulator.serial_adapter.term.loadAddon(fitAddon);
+        fitAddon.fit();
+        window.addEventListener("resize", () => fitAddon.fit());
+      }
+
+      function sendBackgroundCommands(commands) {
+        const filename = `${(Math.random() + 1).toString(36).substring(7)}.sh`;
+        emulator.create_file(
+          `/inbox/${filename}`,
+          new TextEncoder("UTF-8").encode(commands.join("\n"))
+        );
+      }
+
+      if (!boot) {
+        emulator.add_listener("emulator-ready", function () {
+          initTerm();
+          setTimeout(() => {
+            sendBackgroundCommands(["/etc/init.d/S40network restart"]);
+            emulator.serial0_send(
+              `\\! stty rows ${emulator.serial_adapter.term.rows} cols ${emulator.serial_adapter.term.cols} && reset\n`
+            );
+            emulator.serial_adapter.term.focus();
+          }, 0);
+        });
+      }
+
+      var state;
+
+      document.getElementById("save_restore").onclick = async function () {
+        var button = this;
+
+        if (state) {
+          button.value = "Save state";
+          await emulator.restore_state(state);
+          state = undefined;
+        } else {
+          const new_state = await emulator.save_state();
+          console.log("Saved state of " + new_state.byteLength + " bytes");
+          button.value = "Restore state";
+          state = new_state;
+        }
+
+        button.blur();
+      };
+
+      document.getElementById("save_file").onclick = async function () {
+        const new_state = await emulator.save_state();
+        var a = document.createElement("a");
+        a.download = "v86state.bin";
+        a.href = window.URL.createObjectURL(new Blob([new_state]));
+        a.dataset.downloadurl =
+          "application/octet-stream:" + a.download + ":" + a.href;
+        a.click();
+
+        this.blur();
+      };
+
+      document.getElementById("restore_file").onchange = function () {
+        if (this.files.length) {
+          var filereader = new FileReader();
+          emulator.stop();
+
+          filereader.onload = async function (e) {
+            await emulator.restore_state(e.target.result);
+            emulator.run();
+          };
+
+          filereader.readAsArrayBuffer(this.files[0]);
+
+          this.value = "";
+        }
+
+        this.blur();
+      };
+
+      document.getElementById("upload_files").onchange = function (e) {
+        var files = e.target.files;
+        for (var i = 0; i < files.length; i++) {
+          var reader = new FileReader();
+          reader.onload = (function (file) {
+            return function (e) {
+              var data = new TextEncoder("UTF-8").encode(e.target.result);
+              emulator.create_file("/" + file.name, data);
+              console.log("uploaded " + file.name);
             };
+          })(files[i]);
+          reader.readAsText(files[i]);
+        }
+      };
 
-            var emulator = new V86Starter(options);
-
-            if (!boot) {
-                emulator.add_listener("emulator-ready", function () {
-                    const fitAddon = new FitAddon.FitAddon();
-                    emulator.serial_adapter.term.loadAddon(fitAddon);
-                    fitAddon.fit();
-                    window.addEventListener("resize", () => fitAddon.fit());
-                    // emulator.serial_adapter.term.setOption("allowTransparency", true);
-                    // emulator.serial_adapter.term.setOption("theme", { background: "transparent" });
-                    setTimeout(() => {
-                        emulator.serial0_send('/etc/init.d/S40network restart\n');
-                        emulator.serial0_send('psql -U postgres\n');
-                        emulator.serial0_send('\\! echo "boot_completed"; reset\n');
-                    }, 0);
-                });
-
-                function handleBoot(line) {
-                    if (line.startsWith("postgres=# boot_completed")) {
-                        emulator.remove_listener(handleBoot);
-                        setTimeout(() => {
-                            emulator.serial_adapter.term.focus();
-                        }, 300);
-                    }
-                }
-                emulator.add_listener("serial0-output-line", handleBoot);
-            }
-
-            var state;
-
-            document.getElementById("save_restore").onclick = async function () {
-                var button = this;
-
-                if (state) {
-                    button.value = "Save state";
-                    await emulator.restore_state(state);
-                    state = undefined;
-                }
-                else {
-                    const new_state = await emulator.save_state();
-                    console.log("Saved state of " + new_state.byteLength + " bytes");
-                    button.value = "Restore state";
-                    state = new_state;
-                }
-
-                button.blur();
-            };
-
-            document.getElementById("save_file").onclick = async function () {
-                const new_state = await emulator.save_state();
-                var a = document.createElement("a");
-                a.download = "v86state.bin";
-                a.href = window.URL.createObjectURL(new Blob([new_state]));
-                a.dataset.downloadurl = "application/octet-stream:" + a.download + ":" + a.href;
-                a.click();
-
-                this.blur();
-            };
-
-            document.getElementById("restore_file").onchange = function () {
-                if (this.files.length) {
-                    var filereader = new FileReader();
-                    emulator.stop();
-
-                    filereader.onload = async function (e) {
-                        await emulator.restore_state(e.target.result);
-                        emulator.run();
-                    };
-
-                    filereader.readAsArrayBuffer(this.files[0]);
-
-                    this.value = "";
-                }
-
-                this.blur();
-            };
-
-            document.getElementById("upload_files").onchange = function (e) {
-                var files = e.target.files;
-                for (var i = 0; i < files.length; i++) {
-                    var reader = new FileReader();
-                    reader.onload = function (file) {
-                        return function (e) {
-                            var data = (new TextEncoder('UTF-8')).encode(e.target.result);
-                            emulator.create_file("/" + file.name, data);
-                            console.log("uploaded " + file.name);
-                        }
-                    }(files[i]);
-                    reader.readAsText(files[i]);
-                }
-            }
-        };
-
-    </script>
+      const uploadBtns = document.getElementsByClassName("upload-btn");
+      for (let btn of uploadBtns) {
+        btn.addEventListener("click", (event) => {
+          const input = btn.getElementsByTagName("input")[0];
+          input.click(event);
+        });
+      }
+    };
+  </script>
 </head>
 
 <body>
-    <div id="screen_container" style="display:none">
-        <div></div>
-        <canvas></canvas>
-    </div>
+  <div id="screen_container" style="display: none">
+    <div></div>
+    <canvas></canvas>
+  </div>
+  <div id="menu">
     <div>
-        <input id="save_restore" type="button" value="Save state">
-        <input id="save_file" type="button" value="Save state to file">
-        Restore from file: <input id="restore_file" type="file">
-        Upload files to the emulator: <input id="upload_files" type="file" multiple>
+      <input id="save_restore" type="button" value="Save state" />
+      <input id="save_file" type="button" value="Save state to file" />
     </div>
-    <hr />
-    <div class="container">
-        <div class="xterminal">
-            <div id="terminal"></div>
-        </div>
+    <div style="display: flex">
+      <div class="upload-btn">
+        <input id="restore_file" type="file" hidden />
+        <p>Restore from file</p>
+      </div>
+      <div class="upload-btn">
+        <input id="upload_files" type="file" multiple hidden />
+        <p>Upload files to the emulator</p>
+      </div>
     </div>
+  </div>
+  <div class="container">
+    <div class="xterminal">
+      <div id="terminal"></div>
+    </div>
+  </div>
 </body>
