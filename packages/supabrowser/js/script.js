@@ -277,18 +277,11 @@ window.onload = () => {
     this.blur();
   };
   loadModal();
-  console.log('localStorage has', localStorage.getItem('hide_getting_started'))
   let hide_getting_started = localStorage.getItem('hide_getting_started') || "false";
-  console.log('hide_getting_started', hide_getting_started);
   document.getElementById("hide_getting_started").checked = (hide_getting_started === "true");
 
-  console.log('xx: hide_getting_started', hide_getting_started, typeof hide_getting_started);
-
   if (hide_getting_started === "false") {
-    console.log('SHOW hide_getting_started is', hide_getting_started);
     document.getElementById("getting_started").click();
-  } else {
-    console.log('whoops hide_getting_started is', hide_getting_started);
   }
 };
 
@@ -467,7 +460,6 @@ function toggle_virtual_keyboard() {
 const loadModal = () => {
   // Functions to open and close a modal
   function openModal($el) {
-    console.log('openModal is using', $el);
     $el.classList.add('is-active');
   }
 
@@ -510,7 +502,6 @@ const loadModal = () => {
   });
 };
 function hide_getting_started(e) {
-  console.log('hide_getting_started', e.checked)
   localStorage.setItem('hide_getting_started', e.checked);
 }
 // *** end modal ***
