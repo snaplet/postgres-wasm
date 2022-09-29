@@ -39,7 +39,7 @@
     <div id="mySidenav" class="column is-one-quarter h-full">
       <div class="sidenav menu-content p-2">
 
-        <button class="js-modal-trigger button is-fullwidth is-dark" data-target="modal-js-example">
+        <button id="getting_started" class="js-modal-trigger button is-fullwidth is-dark" data-target="modal-js-example">
           Getting Started
         </button><br/>
 
@@ -70,10 +70,9 @@
               </div>
 
             </section>
-            <!-- <footer class="modal-card-foot">
-              <button class="button is-success">Save changes</button>
-              <button class="button">Cancel</button>
-            </footer> -->
+            <footer class="modal-card-foot">
+              <input type="checkbox"id="hide_getting_started" onchange="hide_getting_started(this)" />&nbsp;don't show this again
+            </footer>
           </div>
         </div>
 
