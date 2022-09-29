@@ -21,7 +21,7 @@ window.onload = () => {
       if (!config.proxy_url) {
         config.proxy_url = "wss://proxy.wasm.supabase.com/";
       }
-      console.log("config loaded from localStorage", config);
+      // console.log("config loaded from localStorage", config);
     }
   } catch (err) {
     console.error("error restoring config from localStorage", err);
@@ -133,13 +133,11 @@ window.onload = () => {
     emulator.add_listener("serial0-output-line", handleBoot);
   } else {
     emulator.add_listener("emulator-ready", function () {
-      console.log("emulator ready!");
       emulator.serial_adapter.term.options.fontSize = config.font_size;
 
       initTerm();
 
       setTimeout(() => {
-        console.log("QUICK BOOT HERE");
         //emulator.serial0_send("psql -U postgres\n");
         emulator.serial0_send(`\\! stty rows ${emulator.serial_adapter.term.rows} cols ${emulator.serial_adapter.term.cols} && echo "boot_completed" && reset\n`);
         emulator.serial_adapter.term.focus();
@@ -381,7 +379,7 @@ function preloader() {
 let get_address_counter = 0;
 async function get_address() {
   const progress_el = document.getElementById("progress");
-  progress_el.innerHTML = "Getting IP address...";
+  progress_el.innerHTML = "Connecting network...";
   let result = "";
   try {
     const contents = await emulator.read_file("/addr.txt");
@@ -390,7 +388,7 @@ async function get_address() {
     console.log("error", err);
     document.getElementById("progress").innerHTML = "";
     if (err && err.message && err.message === "File not found") {
-      progress_el.innerHTML = "Getting IP address...ready";
+      progress_el.innerHTML = "Connecting network...ready";
     }
   } finally {
     if (result && result.length > 0) {
@@ -400,29 +398,23 @@ async function get_address() {
       let proxy_domain = config.proxy_url.split("//")[1] || "NO_PROXY";
       if (proxy_domain.endsWith('/')) proxy_domain = proxy_domain.slice(0, -1);
       document.getElementById("IP").innerHTML =
-        "IP: " +
-        result +
+        `host:${proxy_domain} port:${arr[2]}${arr[3]}` +
+        // result + // this is the private ip address
         `<br/>psql postgres://postgres@${proxy_domain}:${arr[2]}${arr[3]}`;
-
-      console.log("got address", result);
-      
-      console.log(        "IP: " +
-      result +
-      `<br/>psql postgres://postgres@${proxy_domain}:${arr[2]}${arr[3]}`);
 
       get_address_counter = 0;
       progress_el.innerHTML = "";
     } else {
-      progress_el.innerHTML = "Getting IP address..." + get_address_counter;
+      progress_el.innerHTML = "Connecting network..." +(get_address_counter + 1);
       if (get_address_counter < 10) {
         get_address_counter++;
         setTimeout(get_address, 1000);
       } else {
         get_address_counter = 0;
-        progress_el.innerHTML = "Getting IP address...FAILED";
+        progress_el.innerHTML = "Connecting network...FAILED";
         setTimeout(() => {
           progress_el.innerHTML = "";
-        }, 2000);
+        }, 3000);
       }
     }
   }
@@ -460,7 +452,6 @@ function toggle_virtual_keyboard() {
 }
 // *** modal ***
 const loadModal = () => {
-  console.log('*** DOMContentLoaded ***');
   // Functions to open and close a modal
   function openModal($el) {
     console.log('openModal is using', $el);
