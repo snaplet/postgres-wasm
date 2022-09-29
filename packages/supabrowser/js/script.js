@@ -278,6 +278,7 @@ window.onload = () => {
 
     this.blur();
   };
+  loadModal();
 };
 
 function initTerm() {
@@ -458,7 +459,7 @@ function toggle_virtual_keyboard() {
   }
 }
 // *** modal ***
-document.addEventListener('DOMContentLoaded', () => {
+const loadModal = () => {
   console.log('*** DOMContentLoaded ***');
   // Functions to open and close a modal
   function openModal($el) {
@@ -503,5 +504,5 @@ document.addEventListener('DOMContentLoaded', () => {
       closeAllModals();
     }
   });
-});
+};
 // *** end modal ***
