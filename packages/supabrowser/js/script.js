@@ -5,7 +5,7 @@ let config = {
   font_size: 15,
   memory_size: 128,
   save_filename: "state.bin",
-  proxy_url: '' || "wss://proxy.supabrowser.com/",
+  proxy_url: '' || "wss://proxy.wasm.supabase.com/",
   // vga_memory_size: 2,
 };
 const storage = idbStorage.createIDBStorage({
@@ -19,7 +19,7 @@ window.onload = () => {
     if (saved_config) {
       config = JSON.parse(saved_config);
       if (!config.proxy_url) {
-        config.proxy_url = "wss://proxy.supabrowser.com/";
+        config.proxy_url = "wss://proxy.wasm.supabase.com/";
       }
       console.log("config loaded from localStorage", config);
     }
@@ -42,7 +42,7 @@ window.onload = () => {
     screen_container: document.getElementById("screen_container"),
     serial_container_xtermjs: document.getElementById("terminal"),
     // network_relay_url: "wss://relay.widgetry.org/", // For non localhost: wss://relay.widgetry.org/
-    network_relay_url: config.proxy_url || "wss://proxy.supabrowser.com/",
+    network_relay_url: config.proxy_url || "wss://proxy.wasm.supabase.com/",
     preserve_mac_from_state_image: false,
     mac_address_translation: false,
     autostart: true,
@@ -457,3 +457,51 @@ function toggle_virtual_keyboard() {
     document.getElementById("keyboard_toggle_2").style.display = "inline";
   }
 }
+// *** modal ***
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('*** DOMContentLoaded ***');
+  // Functions to open and close a modal
+  function openModal($el) {
+    console.log('openModal is using', $el);
+    $el.classList.add('is-active');
+  }
+
+  function closeModal($el) {
+    $el.classList.remove('is-active');
+  }
+
+  function closeAllModals() {
+    (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+      closeModal($modal);
+    });
+  }
+
+  // Add a click event on buttons to open a specific modal
+  (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+    const modal = $trigger.dataset.target;
+    const $target = document.getElementById(modal);
+
+    $trigger.addEventListener('click', () => {
+      openModal($target);
+    });
+  });
+
+  // Add a click event on various child elements to close the parent modal
+  (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+    const $target = $close.closest('.modal');
+
+    $close.addEventListener('click', () => {
+      closeModal($target);
+    });
+  });
+
+  // Add a keyboard event to close all modals
+  document.addEventListener('keydown', (event) => {
+    const e = event || window.event;
+
+    if (e.keyCode === 27) { // Escape key
+      closeAllModals();
+    }
+  });
+});
+// *** end modal ***

@@ -38,6 +38,45 @@
 
     <div id="mySidenav" class="sidenav column is-one-quarter h-full">
       <div class="menu-content p-2">
+
+        <button class="js-modal-trigger button is-fullwidth is-dark" data-target="modal-js-example">
+          Getting Started
+        </button><br/>
+
+        <div id="modal-js-example" class="modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">PostgreSQL in the Browser</p>
+              <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+              <div class="content">
+                <p>This is PostgreSQL, running in a virtual machine inside the browser.</p>
+                <p>Use <b>psql</b>, the PostgreSQL command-line tool, to interact with the database.</p>
+                <h3>Network</h3>                
+                <p>Use the <b>Start</b> button to establish a network connection between the vm and the internet.  Once connected, your private proxy IP will be displayed along with a unique port for connecting to your PostgreSQL instance.</p>
+                <h3>Connecting to PostgreSQL</h3>                
+                <ul>
+                  <li>Set up a password for the <b>postgres</b> user:<br>
+                    <code>ALTER USER postgres WITH PASSWORD 'password';</code>
+                  </li>Connect using the port provided in the status bar:<br>
+                  host: <b>proxy.wasm.supabase.com</b><br>
+                  port: <b>[port]</b><br>
+                  user: <b>postgres</b><br>
+                  database: <b>postgres</b><br>
+                    <code>psql postgres://postgres@proxy.wasm.supabase.com:[port]</code>
+                </ul>
+              </div>
+
+            </section>
+            <!-- <footer class="modal-card-foot">
+              <button class="button is-success">Save changes</button>
+              <button class="button">Cancel</button>
+            </footer> -->
+          </div>
+        </div>
+
         <div id="virtual_keyboard" style="display: none; margin-top: -48px !important;">
           <h2 class="title is-5 mt-6">
             <button id="keyboard_toggle1" class="button is-dark" style="text-align: right; border: 1px solid white;" onclick="toggle_virtual_keyboard()">
