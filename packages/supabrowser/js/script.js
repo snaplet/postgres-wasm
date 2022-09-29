@@ -139,8 +139,8 @@ window.onload = () => {
       initTerm();
 
       setTimeout(() => {
-
-        emulator.serial0_send("psql -U postgres\n");
+        console.log("QUICK BOOT HERE");
+        //emulator.serial0_send("psql -U postgres\n");
         emulator.serial0_send(`\\! stty rows ${emulator.serial_adapter.term.rows} cols ${emulator.serial_adapter.term.cols} && echo "boot_completed" && reset\n`);
         emulator.serial_adapter.term.focus();
 
