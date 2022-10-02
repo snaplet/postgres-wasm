@@ -363,6 +363,7 @@ function restart_network() {
 function stop_network() {
   send_script("stop_network", "/etc/init.d/S40network stop &> /dev/null");
   document.getElementById("progress").innerHTML = "";
+  document.getElementById("IP").innerHTML = "";
 }
 
 let get_new_ip_counter = 0;
@@ -412,8 +413,12 @@ async function get_address() {
       progress_el.innerHTML = "";
     } else {
       progress_el.innerHTML = "Connecting network..." +(get_address_counter + 1);
-      if (get_address_counter < 10) {
+      if (get_address_counter < 20) {
         get_address_counter++;
+        setTimeout(() => {
+            send_script("script_name",`ip route get 1 | awk '{print $7}' &> /addr.txt\n
+            sync\n`);          
+        }, 2000);
         setTimeout(get_address, 1000);
       } else {
         get_address_counter = 0;
