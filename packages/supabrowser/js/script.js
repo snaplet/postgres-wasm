@@ -5,7 +5,7 @@ let config = {
   font_size: 15,
   memory_size: 128,
   save_filename: "state.bin",
-  proxy_url: '' || "wss://proxy.wasm.supabase.com/",
+  proxy_url: '' || "wss://proxy1.wasm.supabase.com/",
   // vga_memory_size: 2,
 };
 const storage = idbStorage.createIDBStorage({
@@ -19,7 +19,7 @@ window.onload = () => {
     if (saved_config) {
       config = JSON.parse(saved_config);
       if (!config.proxy_url) {
-        config.proxy_url = "wss://proxy.wasm.supabase.com/";
+        config.proxy_url = "wss://proxy1.wasm.supabase.com/";
       }
       // console.log("config loaded from localStorage", config);
     }
@@ -42,7 +42,7 @@ window.onload = () => {
     screen_container: document.getElementById("screen_container"),
     serial_container_xtermjs: document.getElementById("terminal"),
     // network_relay_url: "wss://relay.widgetry.org/", // For non localhost: wss://relay.widgetry.org/
-    network_relay_url: config.proxy_url || "wss://proxy.wasm.supabase.com/",
+    network_relay_url: config.proxy_url || "wss://proxy1.wasm.supabase.com/",
     preserve_mac_from_state_image: false,
     mac_address_translation: false,
     autostart: true,
