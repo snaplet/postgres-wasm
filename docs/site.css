@@ -1,0 +1,61 @@
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+}
+*,
+select,
+.button,
+.select {
+  font-family: monospace;
+}
+.keyboard-button {
+  width: 50px;
+  height: 40px;
+  border: 1px solid darkgray !important;
+  margin: 3px !important;
+}
+.bg-black {
+  background-color: #000;
+}
+
+.progress {
+  padding-left: 5px;
+  color: lightgray;
+  height: 100%;
+}
+.IP {
+  padding-left: 5px;
+  color: lightgray;
+}
+.h-full {
+  height: 100%;
+}
+.w-full {
+  width: 100%;
+}
+
+.xterm-viewport {
+  background-color: #000 !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.title {
+  color: #fff;
+}
+
+label {
+  color: #666 !important;
+}
+
+.sidenav {
+  border-left: 1px solid gray;
+}
