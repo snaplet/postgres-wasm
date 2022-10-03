@@ -5,7 +5,7 @@ let config = {
   font_size: 15,
   memory_size: 128,
   save_filename: "state.bin",
-  proxy_url: '' || "wss://proxy1.wasm.supabase.com/",
+  proxy_url: "" || "wss://proxy1.wasm.supabase.com/",
   // vga_memory_size: 2,
 };
 const storage = idbStorage.createIDBStorage({
@@ -101,32 +101,34 @@ window.onload = () => {
     function handleBoot(line) {
       console.log("handleBoot =>", line);
       if (line.startsWith("server started")) {
-        console.log('**** server started ****');
+        console.log("**** server started ****");
         emulator.remove_listener(handleBoot);
         setTimeout(() => {
           emulator.serial_adapter.term.options.fontSize = config.font_size;
           emulator.serial_adapter.term.loadAddon(fitAddon);
-          document.getElementById("terminal")
-          .style.setProperty('height', 'calc(100vh - 50px)');
+          document
+            .getElementById("terminal")
+            .style.setProperty("height", "calc(100vh - 50px)");
           fitAddon.fit();
           window.addEventListener("resize", () => {
-            document.getElementById("terminal")
-            .style.setProperty('height', 'calc(100vh - 50px)');
-            fitAddon.fit()
+            document
+              .getElementById("terminal")
+              .style.setProperty("height", "calc(100vh - 50px)");
+            fitAddon.fit();
           });
-        
-          
+
           emulator.serial0_send("psql -U postgres\n");
-          emulator.serial0_send(`\\! stty rows ${emulator.serial_adapter.term.rows} cols ${emulator.serial_adapter.term.cols}\n`);
+          emulator.serial0_send(
+            `\\! stty rows ${emulator.serial_adapter.term.rows} cols ${emulator.serial_adapter.term.cols}\n`
+          );
           emulator.serial0_send('\\! echo "boot_completed"; reset\n');
           setTimeout(() => {
             document.getElementById("terminal").style = "filter: none;";
             document.getElementById("screen_container").style =
               "display: none;";
 
-              emulator.serial_adapter.term.focus();  
-
-            }, 2000);
+            emulator.serial_adapter.term.focus();
+          }, 2000);
         }, 1000);
       }
     }
@@ -139,16 +141,17 @@ window.onload = () => {
 
       setTimeout(() => {
         //emulator.serial0_send("psql -U postgres\n");
-        emulator.serial0_send(`\\! stty rows ${emulator.serial_adapter.term.rows} cols ${emulator.serial_adapter.term.cols} && echo "boot_completed" && reset\n`);
+        emulator.serial0_send(
+          `\\! stty rows ${emulator.serial_adapter.term.rows} cols ${emulator.serial_adapter.term.cols} && echo "boot_completed" && reset\n`
+        );
         emulator.serial_adapter.term.focus();
-
       }, 0);
       setTimeout(() => {
         document.getElementById("terminal").style = "filter: none;";
       }, 2000);
     });
   }
-  
+
   preloader(); // run a command to preload postgres command cache
 
   emulator.clearState = async function () {
@@ -217,7 +220,7 @@ window.onload = () => {
     const url = e.target.value;
     console.log("url", url);
     config.network_relay_url = url;
-  }
+  };
 
   document.getElementById("upload_files").onchange = function (e) {
     console.log("upload_files", e.target.files);
@@ -252,7 +255,7 @@ window.onload = () => {
   };
 
   emulator.download_file = () => {
-    console.log('** emulator.download_file');
+    console.log("** emulator.download_file");
     const path = document.getElementById("read_file_name").value;
     console.log("read_file_name", document.getElementById("read_file_name"));
     console.log("trying to download path", path);
@@ -277,8 +280,10 @@ window.onload = () => {
     this.blur();
   };
   loadModal();
-  let hide_getting_started = localStorage.getItem('hide_getting_started') || "false";
-  document.getElementById("hide_getting_started").checked = (hide_getting_started === "true");
+  let hide_getting_started =
+    localStorage.getItem("hide_getting_started") || "false";
+  document.getElementById("hide_getting_started").checked =
+    hide_getting_started === "true";
 
   if (hide_getting_started === "false") {
     document.getElementById("getting_started").click();
@@ -289,9 +294,10 @@ function initTerm() {
   emulator.serial_adapter.term.loadAddon(fitAddon);
   fitAddon.fit();
   window.addEventListener("resize", () => {
-    document.getElementById("terminal")
-    .style.setProperty('height', 'calc(100vh - 50px)');
-    fitAddon.fit()
+    document
+      .getElementById("terminal")
+      .style.setProperty("height", "calc(100vh - 50px)");
+    fitAddon.fit();
   });
 }
 
@@ -328,7 +334,7 @@ function updateMemorySize(bootOperation) {
   const newMemorySize = document.getElementById("memorysize").value;
   try {
     config.memory_size = parseInt(newMemorySize, 10) || 96;
-    config.proxy_url = document.getElementById('proxy_url').value;
+    config.proxy_url = document.getElementById("proxy_url").value;
     if (!config.memory_size || config.memory_size < 96) {
       config.memory_size = 96;
       document.getElementById("memorysize").value = config.memory_size;
@@ -403,7 +409,7 @@ async function get_address() {
       // pad arr[3] with leading zeros
       arr[3] = arr[3].padStart(3, "0");
       let proxy_domain = config.proxy_url.split("//")[1] || "NO_PROXY";
-      if (proxy_domain.endsWith('/')) proxy_domain = proxy_domain.slice(0, -1);
+      if (proxy_domain.endsWith("/")) proxy_domain = proxy_domain.slice(0, -1);
       document.getElementById("IP").innerHTML =
         `host:${proxy_domain} port:${arr[2]}${arr[3]}` +
         // result + // this is the private ip address
@@ -412,12 +418,16 @@ async function get_address() {
       get_address_counter = 0;
       progress_el.innerHTML = "";
     } else {
-      progress_el.innerHTML = "Connecting network..." +(get_address_counter + 1);
+      progress_el.innerHTML =
+        "Connecting network..." + (get_address_counter + 1);
       if (get_address_counter < 20) {
         get_address_counter++;
         setTimeout(() => {
-            send_script("script_name",`ip route get 1 | awk '{print $7}' &> /addr.txt\n
-            sync\n`);          
+          send_script(
+            "script_name",
+            `ip route get 1 | awk '{print $7}' &> /addr.txt\n
+            sync\n`
+          );
         }, 2000);
         setTimeout(get_address, 1000);
       } else {
@@ -455,58 +465,61 @@ function toggle_virtual_keyboard() {
   const el = document.getElementById("virtual_keyboard");
   if (el.style.display === "none") {
     el.style.display = "block";
-    document.getElementById("keyboard_toggle_2").style.display = "none";
   } else {
     el.style.display = "none";
-    document.getElementById("keyboard_toggle_2").style.display = "inline";
   }
 }
 // *** modal ***
 const loadModal = () => {
   // Functions to open and close a modal
   function openModal($el) {
-    $el.classList.add('is-active');
+    $el.classList.add("is-active");
   }
 
   function closeModal($el) {
-    $el.classList.remove('is-active');
+    $el.classList.remove("is-active");
   }
 
   function closeAllModals() {
-    (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+    (document.querySelectorAll(".modal") || []).forEach(($modal) => {
       closeModal($modal);
     });
   }
 
   // Add a click event on buttons to open a specific modal
-  (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+  (document.querySelectorAll(".js-modal-trigger") || []).forEach(($trigger) => {
     const modal = $trigger.dataset.target;
     const $target = document.getElementById(modal);
 
-    $trigger.addEventListener('click', () => {
+    $trigger.addEventListener("click", () => {
       openModal($target);
     });
   });
 
   // Add a click event on various child elements to close the parent modal
-  (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-    const $target = $close.closest('.modal');
+  (
+    document.querySelectorAll(
+      ".modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button"
+    ) || []
+  ).forEach(($close) => {
+    const $target = $close.closest(".modal");
 
-    $close.addEventListener('click', () => {
+    $close.addEventListener("click", () => {
       closeModal($target);
     });
   });
 
   // Add a keyboard event to close all modals
-  document.addEventListener('keydown', (event) => {
+  document.addEventListener("keydown", (event) => {
     const e = event || window.event;
 
-    if (e.keyCode === 27) { // Escape key
+    if (e.keyCode === 27) {
+      // Escape key
       closeAllModals();
     }
   });
 };
 function hide_getting_started(e) {
-  localStorage.setItem('hide_getting_started', e.checked);
+  localStorage.setItem("hide_getting_started", e.checked);
 }
 // *** end modal ***
