@@ -2,10 +2,11 @@
 If you want to install the proxy server on your own server, here's the easiest way to get started:
 
 1.  Start with an Ubuntu 20.04 server instance.  This is the only configuration that's currently tested.  Ubuntu 22.04 will not work, as it uses `OpenSSL 3.0` which is not compatible with the docker image's versons of `OpenSSL` and `nginx`.
-2.  Make sure the DNS for your domain points to this new server.  (Use an `A` record.)
-3.  Copy the `install.sh` file to the server.
-4.  Modify the first two lines of `install.sh` to set your `PROXY_DOMAIN` and `PROXY_DOMAIN_SUPPORT_EMAIL`.
-5.  Execute the `install.sh` script on the server.
+2.  Make sure Docker is installed.  (see install_docker.sh for installing Docker on Ubuntu 20.04 amd64)
+3.  Make sure the DNS for your domain points to this new server.  (Use an `A` record.)
+4.  Copy the `install.sh` file to the server.
+5.  Modify the first two lines of `install.sh` to set your `PROXY_DOMAIN` and `PROXY_DOMAIN_SUPPORT_EMAIL`.
+6.  Execute the `install.sh` script on the server.
 
 
 # WebSockets Proxy
