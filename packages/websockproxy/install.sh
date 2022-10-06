@@ -12,6 +12,7 @@ apt install -y cron
 certbot certonly -d $PROXY_DOMAIN --standalone -n --agree-tos --email $PROXY_DOMAIN_SUPPORT_EMAIL
 docker cp -L /etc/letsencrypt/live/$PROXY_DOMAIN/fullchain.pem relay:/root/fullchain.pem
 docker cp -L /etc/letsencrypt/live/$PROXY_DOMAIN/privkey.pem relay:/root/privkey.pem
+docker exec -it relay nginx # start nginx
 
 crontab -l | { cat; echo "0 1 * * * certbot renew --standalone"; } | crontab -
 crontab -l | { cat; echo "0 2 * * * docker cp -L /etc/letsencrypt/live/$PROXY_DOMAIN/fullchain.pem relay:/root/fullchain.pem"; } | crontab -
