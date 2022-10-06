@@ -1,6 +1,6 @@
 <div align="center">
   <h1 align="center">Postgres WASM</h1>
-  <p align="center">A PostgresQL server instance running in a virtual machine running in the browser<br />
+  <p align="center">A PostgreSQL server instance running in a virtual machine running in the browser<br />
   <i>by Supabase &amp; Snaplet</i></p>
   <img align="center" src="https://user-images.githubusercontent.com/90199159/192729860-730e89a9-2489-4a95-a814-25eaaebebb7d.png" alt="Snaplet, Supabase and friends" width="480">
   <br /><br />
@@ -24,7 +24,7 @@ Go to http://localhost:3000 and have fun!
 
 ## Packages
 
-This repo is split into three packages that build up the environment for running PostgresQL in the browser.
+This repo is split into three packages that build up the environment for running PostgreSQL in the browser.
 
 - [runtime](/packages/runtime): The v86 emulator that starts the `buildroot` image
 - [Buildroot](/packages/buildroot): Scripts to build the CPU and memory snapshot run by v86.
