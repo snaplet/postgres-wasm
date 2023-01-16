@@ -40,14 +40,25 @@ The goal of this build process is to produce a `filesystem` folder containing a 
 
 2. Build the `filesystem` folder:
 
-```bash
-make
-```
+    ```bash
+    make
+    ```
 
-...
+    ...
 
-At this point you can go for a walk, it will take a bit of time :turtle:
+    At this point you can go for a walk, it will take a bit of time :turtle:
 
-...
+    ...
 
-The `filesystem` folder should be available on the host at `build/filesystem`
+3. The `filesystem` folder should be available on the host at `build/filesystem`. Copy it to `packages/runtime/filesystem`:
+
+    ```bash
+    # (on the host)
+    rm -r ../runtime/filesystem/
+    cp -r build/filesystem ../runtime/
+    ```
+
+    Update the `bzimageUrl` ID in the `index.html` file of the runtime:
+    ```bash
+    jq -r '.fsroot | map(select(.[0] == "bzImage"))[0][6]' < ../runtime/filesystem/filesystem.json
+    ```
