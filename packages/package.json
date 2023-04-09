@@ -1,0 +1,14 @@
+{
+  "name": "supabrowser",
+  "version": "1.0.0",
+  "description": "This is a demo app for `postgres-wasm`, showing how to consume a PostgreSQL instance inside a browser.",
+  "main": "index.js",
+  "scripts": {
+    "tauri": "tauri"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.2.3"
+  }
+}
