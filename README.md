@@ -14,6 +14,15 @@
 </div>
 <br />
 
+## The future is now
+
+Since we worked on this project, awesome and more usable solutions exist:
+
+- [PGlite by ElectricSQL](https://github.com/electric-sql/pglite) which is a native WASM build of Postgres
+- [pgmock by Stackframe](https://github.com/stackframe-projects/pgmock) which is using the same approach as this project, emulating the Postgres server in an x86 emulator
+
+While `postgres-wasm` was more of a proof of concept, both the above solutions can be used to run PostgreSQL in the browser or getting in-memory PostgreSQL databases!
+
 ## Quickstart
 
 ```terminal
